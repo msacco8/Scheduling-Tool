@@ -6,35 +6,27 @@
 	/**
      * @type {any[]}
      */
-	var timeBlocks = [];	//	The days to display in each box
+	var timeBlocks = [];
 	
-	//	The Calendar Component just displays stuff in a row & column. It has no knowledge of dates.
-	//	The items[] below are placed (by you) in a specified row & column of the calendar.
-	//	You need to call findRowCol() to calc the row/col based on each items start date. Each date box has a Date() property.
-	//	And, if an item overlaps rows, then you need to add a 2nd item on the subsequent row.
 	/**
      * @type {any[]}
      */
-	var items = [];
-	function initMonthItems() {
-		items=[
-			// {title:"11:00 Task Early in month",className:"task--primary",date:new Date(y,m,7),len:2},
-			// {title:"7:30 Wk 2 tasks",className:"task--warning",date:d1,len:2},
-			// {title:"Overlapping Stuff (isBottom:true)",date:d1,className:"task--info",len:4,isBottom:true},
-			// {title:"10:00 More Stuff to do",date:new Date(y,m,7),className:"task--info",len:2,detailHeader:"Difficult",detailContent:"But not especially so"},
-			// {title:"All day task",date:new Date(y,m,7),className:"task--danger",len:1,vlen:2},
+  $: availabilities = [];
+	function initAvailabilities() {
+		availabilities=[
+			{title:"11:00 Task Early in month",className:"task--primary",len:2, startMin: 30, day: "Tue"},
 		];
+
 		//This is where you calc the row/col to put each dated item
-		for (let i of items) {
-			// let rc = findRowCol(i.date);
-			// if (rc == null) {
-			// 	console.log('didn`t find date for ',i);
-			// 	console.log(i.date);
-			// 	i.startCol = i.startRow = 0;
-			// } else {
-			// 	i.startCol = rc.col;
-			// 	i.startRow = rc.row;
-			// }
+		for (let avail of availabilities) {
+      console.log(avail);
+			let rc = findRowCol(avail);
+      console.log(rc);
+			if (rc == null) {
+			} else {
+				avail.startCol = rc.col;
+				avail.startRow = rc.row;
+			}
 		}
 	}
 
@@ -42,9 +34,8 @@
   
 	// choose what date/day gets displayed in each date box.
 	function initContent() {
-		// initMonth();
-		initMonthItems();
     initTimeBlocks();
+		initAvailabilities();
 	}
 
   // Adding 30 minute time blocks to each day of the week
@@ -54,47 +45,54 @@
     for (var i = 0; i < 48; i++) {
       for (var j = 0; j < 8; j++) {
         // Note the structure of a time block
-        timeBlocks.push({id: j, day: dayNames[j], startMin: i * 30})
+        timeBlocks.push({row: i, col: j, day: dayNames[j][0], startMin: i * 30})
       }
     }
   }
 	/**
-     * @param {{ getYear: () => any; getMonth: () => any; getDate: () => any; }} availBlock
+     * @param {{ day: any; startMin: any; }} availBlock
      */
 	function findRowCol(availBlock) {
-		for (var i = 0; i< timeBlocks.length; i++) {
-			// let d = days[i].date;
-			// if (d.getYear() === availBlock.getYear()
-			// 	&& d.getMonth() === availBlock.getMonth()
-			// 	&& d.getDate() === availBlock.getDate())
-			// 	return {row:Math.floor(i/7)+2,col:i%7+1};
+		for (var i = 0; i < timeBlocks.length; i++) {
+			let time = timeBlocks[i];
+			if (time.day ==  availBlock.day && time.startMin == availBlock.startMin)
+				return {row: time.row, col: time.col};
 		}
 		return null;	
 	}
+
+  // Adds new availability block to calendar
+  function addNewAvailibity() {
+    availabilities.push({title:"11:00 Task Early in month",className:"task--primary",len:2, startMin: 60, day: "Tue"});
+    availabilities = availabilities
+  }
 </script>
 
 
 <div class="calendar-container">
+
     <div class="calendar">
       {#each dayNames as day}
         <span class="day-name">{day[1]}<br/>{day[0]}</span>
       {/each}
     </div>
+
     <div class="calendar-body">
         {#each timeBlocks as block}
-          {#if block.id == 0 && (block.startMin % 60) == 0}
+          {#if block.col == 0 && (block.startMin % 60) == 0}
             <span class="time">{block.startMin / 60}:00 EST</span>
-          {:else if block.id == 0 && (block.startMin % 60) == 30}
+          {:else if block.col == 0 && (block.startMin % 60) == 30}
             <span class="time">{(block.startMin-30) / 60}:30 EST</span>
           {:else}
-            <span class="day"></span>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <span on:click={addNewAvailibity} class="day"></span>
           {/if}
         {/each}
             
-        {#each items as item}
+        {#each availabilities as item}
             <section
                 class="task {item.className}"
-                style="grid-column: {item.startCol} / span {item.len};      
+                style="grid-column: {item.startCol};      
                 grid-row: {item.startRow};  
                 align-self: {item.isBottom?'end':'center'};"
                 >
@@ -233,7 +231,7 @@
   left: 30%;
   border: solid transparent;
   content: " ";
-  height: 0;
+  height: 100%;
   width: 0;
   position: absolute;
   pointer-events: none;
