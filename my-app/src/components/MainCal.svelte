@@ -58,35 +58,6 @@
       }
     }
   }
-
-	// function initMonth() {
-	// 	days = [];
-	// 	//	find the last Monday of the previous month
-	// 	var firstDay = new Date(year, month, 1).getDay();
-	// 	//console.log('fd='+firstDay+' '+dayNames[firstDay]);
-	// 	var daysInThisMonth = new Date(year, month+1, 0).getDate();
-	// 	var daysInLastMonth = new Date(year, month, 0).getDate();
-	// 	var prevMonth = month==0 ? 11 : month-1;
-		
-	// 	//	show the days before the start of this month (disabled) - always less than 7
-	// 	for (let i=daysInLastMonth-firstDay;i<daysInLastMonth;i++) {
-	// 		let d = new Date(prevMonth==11?year-1:year,prevMonth,i+1);
-	// 		days.push({name:''+(i+1),enabled:false,date:d,});
-	// 	}
-	// 	//	show the days in this month (enabled) - always 28 - 31
-	// 	for (let i=0;i<daysInThisMonth;i++) {
-	// 		let d = new Date(year,month,i+1);
-	// 		if (i==0) days.push({name:monthAbbrev+' '+(i+1),enabled:true,date:d,});
-	// 		else days.push({name:''+(i+1),enabled:true,date:d,});
-	// 		//console.log('i='+i+'  dt is '+d+' date() is '+d.getDate());
-	// 	}
-	// 	//	show any days to fill up the last row (disabled) - always less than 7
-	// 	for (let i=0;days.length%7;i++) {
-	// 		let d = new Date((month==11?year+1:year),(month+1)%12,i+1);
-	// 		if (i==0) days.push({name:nextMonthAbbrev+' '+(i+1),enabled:false,date:d,});
-	// 		else days.push({name:''+(i+1),enabled:false,date:d,});
-	// 	}
-	// }
 	/**
      * @param {{ getYear: () => any; getMonth: () => any; getDate: () => any; }} availBlock
      */
@@ -105,13 +76,16 @@
 
 <div class="calendar-container">
     <div class="calendar">
-        {#each dayNames as day}
-          <span class="day-name">{day[1]}<br/>{day[0]}</span>
-        {/each}
-    
+      {#each dayNames as day}
+        <span class="day-name">{day[1]}<br/>{day[0]}</span>
+      {/each}
+    </div>
+    <div class="calendar-body">
         {#each timeBlocks as block}
-          {#if block.id == 0}
-            <span class="day">{block.startMin / 30}:00 EST</span>
+          {#if block.id == 0 && (block.startMin % 60) == 0}
+            <span class="time">{block.startMin / 60}:00 EST</span>
+          {:else if block.id == 0 && (block.startMin % 60) == 30}
+            <span class="time">{(block.startMin-30) / 60}:30 EST</span>
           {:else}
             <span class="day"></span>
           {/if}
@@ -155,8 +129,17 @@
   grid-auto-rows: 50px;
   overflow: auto;
 }
+.calendar-body {
+  display: grid;
+  width: 100%;
+  height: 500px;
+  grid-template-columns: repeat(8, minmax(120px, 1fr));
+  grid-template-rows: 50px;
+  grid-auto-rows: 50px;
+  overflow-y: scroll;
+}
 .day {
-  border-bottom: 1px solid #DCDCDC;
+  border-top: 1px solid #DCDCDC;
   border-right: 1px solid #DCDCDC;
   text-align: right;
   padding: 14px 20px;
@@ -168,56 +151,30 @@
   z-index: 1;
 }
 .time {
-  grid-column: 1;
+  border-top: 1px solid #DCDCDC;
+  border-right: 1px solid #DCDCDC;
+  text-align: right;
+  padding: 0px 20px;
+  letter-spacing: 1px;
+  font-size: 14px;
+  box-sizing: border-box;
+  color: #98a0a6;
+  position: relative;
+  z-index: 1;
 }
 .day:nth-of-type(8n + 8) {
   border-right: 0;
 }
-/* .day:nth-of-type(n + 1):nth-of-type(-n + 7) {
-  grid-row: 1;
+.time:nth-of-type(8n + 1) {
+  border-top: 0;
+  border-bottom: 0;
+  border-right: 0;
 }
-.day:nth-of-type(n + 8):nth-of-type(-n + 14) {
-  grid-row: 2;
-}
-.day:nth-of-type(n + 15):nth-of-type(-n + 21) {
-  grid-row: 3;
-}
-.day:nth-of-type(n + 22):nth-of-type(-n + 28) {
-  grid-row: 4;
-}
-.day:nth-of-type(n + 29):nth-of-type(-n + 35) {
-  grid-row: 5;
-}
-.day:nth-of-type(n + 36):nth-of-type(-n + 42) {
-  grid-row: 6;
-}
-.day:nth-of-type(7n + 1) {
-  grid-column: 1/1;
-}
-.day:nth-of-type(7n + 2) {
-  grid-column: 2/2;
-}
-.day:nth-of-type(7n + 3) {
-  grid-column: 3/3;
-}
-.day:nth-of-type(7n + 4) {
-  grid-column: 4/4;
-}
-.day:nth-of-type(7n + 5) {
-  grid-column: 5/5;
-}
-.day:nth-of-type(7n + 6) {
-  grid-column: 6/6;
-}
-.day:nth-of-type(7n + 7) {
-  grid-column: 7/7;
-} */
 .day-name {
   font-size: 12px;
   text-transform: uppercase;
   color: #e9a1a7;
   text-align: center;
-  border-bottom: 1px solid #DCDCDC;
   font-weight: 500;
 }
 .task {
