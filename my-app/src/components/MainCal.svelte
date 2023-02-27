@@ -1,145 +1,128 @@
-<p>Main Calendar Component</p>
 
-<!-- <script>
+<script>
 	import {createEventDispatcher, onMount} from 'svelte';
 
-	var dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-	let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	let now = new Date();
-	let year = now.getFullYear();		//	this is the month & year displayed
-	let month = now.getMonth();
-	let eventText="Click an item or date";
-    let dispatch = createEventDispatcher();
-	var days = [];	//	The days to display in each box
+	var dayNames = [["", ""], ["Sun", "28"], ["Mon", "29"], ["Tue", "30"], ["Wed", "31"], ["Thu", "32"], ["Fri", "33"], ["Sat", "34"]];
+	/**
+     * @type {any[]}
+     */
+	var timeBlocks = [];	//	The days to display in each box
 	
 	//	The Calendar Component just displays stuff in a row & column. It has no knowledge of dates.
 	//	The items[] below are placed (by you) in a specified row & column of the calendar.
 	//	You need to call findRowCol() to calc the row/col based on each items start date. Each date box has a Date() property.
 	//	And, if an item overlaps rows, then you need to add a 2nd item on the subsequent row.
+	/**
+     * @type {any[]}
+     */
 	var items = [];
 	function initMonthItems() {
-		let y = year;
-		let m = month;
-		let d1=new Date(y,m,randInt(7)+7);
 		items=[
-			{title:"11:00 Task Early in month",className:"task--primary",date:new Date(y,m,randInt(6)),len:randInt(4)+1},
-			{title:"7:30 Wk 2 tasks",className:"task--warning",date:d1,len:randInt(4)+2},
-			{title:"Overlapping Stuff (isBottom:true)",date:d1,className:"task--info",len:4,isBottom:true},
-			{title:"10:00 More Stuff to do",date:new Date(y,m,randInt(7)+14),className:"task--info",len:randInt(4)+1,detailHeader:"Difficult",detailContent:"But not especially so"},
-			{title:"All day task",date:new Date(y,m,randInt(7)+21),className:"task--danger",len:1,vlen:2},
+			// {title:"11:00 Task Early in month",className:"task--primary",date:new Date(y,m,7),len:2},
+			// {title:"7:30 Wk 2 tasks",className:"task--warning",date:d1,len:2},
+			// {title:"Overlapping Stuff (isBottom:true)",date:d1,className:"task--info",len:4,isBottom:true},
+			// {title:"10:00 More Stuff to do",date:new Date(y,m,7),className:"task--info",len:2,detailHeader:"Difficult",detailContent:"But not especially so"},
+			// {title:"All day task",date:new Date(y,m,7),className:"task--danger",len:1,vlen:2},
 		];
 		//This is where you calc the row/col to put each dated item
 		for (let i of items) {
-			let rc = findRowCol(i.date);
-			if (rc == null) {
-				console.log('didn`t find date for ',i);
-				console.log(i.date);
-				console.log(days);
-				i.startCol = i.startRow = 0;
-			} else {
-				i.startCol = rc.col;
-				i.startRow = rc.row;
-			}
+			// let rc = findRowCol(i.date);
+			// if (rc == null) {
+			// 	console.log('didn`t find date for ',i);
+			// 	console.log(i.date);
+			// 	i.startCol = i.startRow = 0;
+			// } else {
+			// 	i.startCol = rc.col;
+			// 	i.startRow = rc.row;
+			// }
 		}
 	}
-	$: month,year,initContent();
+
+	$: initContent();
+  
 	// choose what date/day gets displayed in each date box.
 	function initContent() {
-		initMonth();
+		// initMonth();
 		initMonthItems();
+    initTimeBlocks();
 	}
-	function initMonth() {
-		days = [];
-		let monthAbbrev = monthNames[month].slice(0,3);
-		let nextMonthAbbrev = monthNames[(month+1)%12].slice(0,3);
-		//	find the last Monday of the previous month
-		var firstDay = new Date(year, month, 1).getDay();
-		//console.log('fd='+firstDay+' '+dayNames[firstDay]);
-		var daysInThisMonth = new Date(year, month+1, 0).getDate();
-		var daysInLastMonth = new Date(year, month, 0).getDate();
-		var prevMonth = month==0 ? 11 : month-1;
+
+  // Adding 30 minute time blocks to each day of the week
+  function initTimeBlocks() {
+    timeBlocks = [];
+
+    for (var i = 0; i < 48; i++) {
+      for (var j = 0; j < 8; j++) {
+        // Note the structure of a time block
+        timeBlocks.push({id: j, day: dayNames[j], startMin: i * 30})
+      }
+    }
+  }
+
+	// function initMonth() {
+	// 	days = [];
+	// 	//	find the last Monday of the previous month
+	// 	var firstDay = new Date(year, month, 1).getDay();
+	// 	//console.log('fd='+firstDay+' '+dayNames[firstDay]);
+	// 	var daysInThisMonth = new Date(year, month+1, 0).getDate();
+	// 	var daysInLastMonth = new Date(year, month, 0).getDate();
+	// 	var prevMonth = month==0 ? 11 : month-1;
 		
-		//	show the days before the start of this month (disabled) - always less than 7
-		for (let i=daysInLastMonth-firstDay;i<daysInLastMonth;i++) {
-			let d = new Date(prevMonth==11?year-1:year,prevMonth,i+1);
-			days.push({name:''+(i+1),enabled:false,date:d,});
-		}
-		//	show the days in this month (enabled) - always 28 - 31
-		for (let i=0;i<daysInThisMonth;i++) {
-			let d = new Date(year,month,i+1);
-			if (i==0) days.push({name:monthAbbrev+' '+(i+1),enabled:true,date:d,});
-			else days.push({name:''+(i+1),enabled:true,date:d,});
-			//console.log('i='+i+'  dt is '+d+' date() is '+d.getDate());
-		}
-		//	show any days to fill up the last row (disabled) - always less than 7
-		for (let i=0;days.length%7;i++) {
-			let d = new Date((month==11?year+1:year),(month+1)%12,i+1);
-			if (i==0) days.push({name:nextMonthAbbrev+' '+(i+1),enabled:false,date:d,});
-			else days.push({name:''+(i+1),enabled:false,date:d,});
-		}
-	}
-	function findRowCol(dt) {
-		for (let i=0;i<days.length;i++) {
-			let d = days[i].date;
-			if (d.getYear() === dt.getYear()
-				&& d.getMonth() === dt.getMonth()
-				&& d.getDate() === dt.getDate())
-				return {row:Math.floor(i/7)+2,col:i%7+1};
+	// 	//	show the days before the start of this month (disabled) - always less than 7
+	// 	for (let i=daysInLastMonth-firstDay;i<daysInLastMonth;i++) {
+	// 		let d = new Date(prevMonth==11?year-1:year,prevMonth,i+1);
+	// 		days.push({name:''+(i+1),enabled:false,date:d,});
+	// 	}
+	// 	//	show the days in this month (enabled) - always 28 - 31
+	// 	for (let i=0;i<daysInThisMonth;i++) {
+	// 		let d = new Date(year,month,i+1);
+	// 		if (i==0) days.push({name:monthAbbrev+' '+(i+1),enabled:true,date:d,});
+	// 		else days.push({name:''+(i+1),enabled:true,date:d,});
+	// 		//console.log('i='+i+'  dt is '+d+' date() is '+d.getDate());
+	// 	}
+	// 	//	show any days to fill up the last row (disabled) - always less than 7
+	// 	for (let i=0;days.length%7;i++) {
+	// 		let d = new Date((month==11?year+1:year),(month+1)%12,i+1);
+	// 		if (i==0) days.push({name:nextMonthAbbrev+' '+(i+1),enabled:false,date:d,});
+	// 		else days.push({name:''+(i+1),enabled:false,date:d,});
+	// 	}
+	// }
+	/**
+     * @param {{ getYear: () => any; getMonth: () => any; getDate: () => any; }} availBlock
+     */
+	function findRowCol(availBlock) {
+		for (var i = 0; i< timeBlocks.length; i++) {
+			// let d = days[i].date;
+			// if (d.getYear() === availBlock.getYear()
+			// 	&& d.getMonth() === availBlock.getMonth()
+			// 	&& d.getDate() === availBlock.getDate())
+			// 	return {row:Math.floor(i/7)+2,col:i%7+1};
 		}
 		return null;	
 	}
-	function itemClick(e) {
-		eventText='itemClick '+JSON.stringify(e) + ' localtime='+e.date.toString();
-	}
-	function dayClick(e) {
-		eventText='onDayClick '+JSON.stringify(e) + ' localtime='+e.date.toString();
-	}
-	function headerClick(e) {
-		eventText='onHheaderClick '+JSON.stringify(e);
-	}
-	function next() {
-		month++;
-		if (month == 12) {
-			year++;
-			month=0;
-		}
-	}
-	function prev() {
-		if (month==0) {
-			month=11;
-			year--;
-		} else {
-			month--;
-		}
-	}
-	
 </script>
 
 
 <div class="calendar-container">
-  <div class="calendar-header">
-		{eventText}
-	</div>
     <div class="calendar">
-        {#each headers as header}
-        <span class="day-name" on:click={()=>dispatch('headerClick',header)}>{header}</span>
+        {#each dayNames as day}
+          <span class="day-name">{day[1]}<br/>{day[0]}</span>
         {/each}
     
-        {#each days as day}
-            {#if day.enabled}
-                <span class="day" on:click={()=>dispatch('dayClick',day)}>{day.name}</span>
-            {:else}
-                <span class="day day-disabled" on:click={()=>dispatch('dayClick',day)}>{day.name}</span>
-            {/if}
+        {#each timeBlocks as block}
+          {#if block.id == 0}
+            <span class="day">{block.startMin / 30}:00 EST</span>
+          {:else}
+            <span class="day"></span>
+          {/if}
         {/each}
             
         {#each items as item}
             <section
-                on:click={()=>dispatch('itemClick',item)} 
                 class="task {item.className}"
-          style="grid-column: {item.startCol} / span {item.len};      
-          grid-row: {item.startRow};  
-          align-self: {item.isBottom?'end':'center'};"
+                style="grid-column: {item.startCol} / span {item.len};      
+                grid-row: {item.startRow};  
+                align-self: {item.isBottom?'end':'center'};"
                 >
                 {item.title}
                 {#if item.detailHeader}
@@ -160,40 +143,21 @@
   width: 90%;
   margin: auto;
   overflow: hidden;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   background: #fff;
   max-width: 1200px;
 }
-.calendar-header {
-  text-align: center;
-  padding: 20px 0;
-  background: #eef;
-  border-bottom: 1px solid rgba(166, 168, 179, 0.12);
-}
-.calendar-header h1 {
-  margin: 0;
-  font-size: 18px;
-}
-.calendar-header button {
-  background: #eef;
-  border: 1px ;
-  padding: 6;
-  color: rgba(81, 86, 93, 0.7);
-  cursor: pointer;
-  outline: 0;
-}
 .calendar {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(7, minmax(120px, 1fr));
+  grid-template-columns: repeat(8, minmax(120px, 1fr));
   grid-template-rows: 50px;
-  grid-auto-rows: 120px;
+  grid-auto-rows: 50px;
   overflow: auto;
 }
 .day {
-  border-bottom: 1px solid rgba(166, 168, 179, 0.12);
-  border-right: 1px solid rgba(166, 168, 179, 0.12);
+  border-bottom: 1px solid #DCDCDC;
+  border-right: 1px solid #DCDCDC;
   text-align: right;
   padding: 14px 20px;
   letter-spacing: 1px;
@@ -203,10 +167,13 @@
   position: relative;
   z-index: 1;
 }
-.day:nth-of-type(7n + 7) {
+.time {
+  grid-column: 1;
+}
+.day:nth-of-type(8n + 8) {
   border-right: 0;
 }
-.day:nth-of-type(n + 1):nth-of-type(-n + 7) {
+/* .day:nth-of-type(n + 1):nth-of-type(-n + 7) {
   grid-row: 1;
 }
 .day:nth-of-type(n + 8):nth-of-type(-n + 14) {
@@ -244,21 +211,14 @@
 }
 .day:nth-of-type(7n + 7) {
   grid-column: 7/7;
-}
+} */
 .day-name {
   font-size: 12px;
   text-transform: uppercase;
   color: #e9a1a7;
   text-align: center;
-  border-bottom: 1px solid rgba(166, 168, 179, 0.12);
-  line-height: 50px;
+  border-bottom: 1px solid #DCDCDC;
   font-weight: 500;
-}
-.day-disabled {
-  color: rgba(152, 160, 166, 0.5);
-  background-color: #ffffff;
-  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fdf9ff' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
-  cursor: not-allowed;
 }
 .task {
   border-left-width: 3px;
@@ -343,4 +303,4 @@
   font-weight: 500;
   color: rgba(81, 86, 93, 0.7);
 }
-</style> -->
+</style>
