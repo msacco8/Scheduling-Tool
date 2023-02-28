@@ -1,11 +1,69 @@
 <script>
-    export let availBlock;
+
+      /**
+     * @type {{ className: any; startCol: any; startRow: any; len: any; isBottom: any; title: any; }}
+     */
+       export let availBlock;
+      /**
+     * @type {HTMLElement}
+     */
+      let this_avail;
+      $: isBottomDraggable = false;
+      $: isTopDraggable = false;
+
+      
+      /**
+     * @param {any} e
+     */
+    function handleExtendOnDrag(e) {
+      let clickY = e.clientY;
+      let blockTop = this_avail.offsetTop;
+      let hitRadius = 15;
+      let blockBottom = blockTop + this_avail.offsetHeight;
+
+      if(blockTop + hitRadius >= clickY && blockTop <= clickY) {
+        isTopDraggable = true;
+        console.log("top is draggable");
+      } else if(blockBottom - hitRadius <= clickY && blockBottom >= clickY) {
+        isBottomDraggable = true;
+        console.log("bottom is draggable");
+      }
+    }
+
+    /**
+     * @param {any} e
+     */
+    function handleMouseMove(e) {
+      if (isTopDraggable && availBlock.startRow > 0) {
+        availBlock.startRow -= 1;
+        availBlock.len += 1;
+      }
+      if (isBottomDraggable) {
+        availBlock.len += 1;
+      }
+      console.log(availBlock.len);
+      console.log("Mouse moved");
+    }
+
+    /**
+     * @param {any} e
+     */
+    function handleMouseLeave(e) {
+      isBottomDraggable = false;
+      console.log("leaving")
+      isTopDraggable = false;
+    }
 </script>
 
 <section
+    on:mousedown={handleExtendOnDrag}
+    on:mousemove={handleMouseMove}
+    on:mouseleave={handleMouseLeave}
+    on:mouseup={handleMouseLeave}
+    bind:this={this_avail}
     class="task {availBlock.className}"
     style="grid-column: {availBlock.startCol};      
-    grid-row: {availBlock.startRow} / span 1;  
+    grid-row: {availBlock.startRow} / span {availBlock.len};  
     align-self: {availBlock.isBottom?'end':'center'};"
     >
     {availBlock.title}
@@ -14,14 +72,14 @@
 <style>
 .task {
   border-left-width: 3px;
-  padding: 8px 12px;
-  /* margin: 10px; */
+  margin-right: 10px;
   border-left-style: solid;
   font-size: 14px;
   position: relative;
   align-self: center;
   z-index:2;
   border-radius: 15px;
+  height: 100%;
 }
 .task--warning {
   border-left-color: #fdb44d;
@@ -48,7 +106,6 @@
   border: 0;
   border-radius: 14px;
   color: #f00;
-  box-shadow: 0 10px 14px rgba(71, 134, 255, 0.4);
 }
 .task-detail {
   position: absolute;
@@ -60,7 +117,6 @@
   padding: 20px;
   box-sizing: border-box;
   border-radius: 14px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
   z-index: 2;
 }
 .task-detail:after, .task-detail:before {

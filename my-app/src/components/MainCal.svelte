@@ -9,34 +9,16 @@
      */
 	var timeBlocks = [];
 	
-	/**
+ /**
      * @type {any[]}
      */
-  $: availabilities = [];
-	function initAvailabilities() {
-		// availabilities=[
-		// 	{title:"11:00 Task Early in month",className:"task--primary",len:2, startMin: 30, day: "Tue"},
-		// ];
-
-		//This is where you calc the row/col to put each dated item
-		// for (let avail of availabilities) {
-    //   console.log(avail);
-		// 	let rc = findRowCol(avail);
-    //   console.log(rc);
-		// 	if (rc == null) {
-		// 	} else {
-		// 		avail.startCol = rc.col;
-		// 		avail.startRow = rc.row;
-		// 	}
-		// }
-	}
+   $: availabilities = [];
 
 	$: initContent();
   
 	// choose what date/day gets displayed in each date box.
 	function initContent() {
     initTimeBlocks();
-		initAvailabilities();
 	}
 
   // Adding 30 minute time blocks to each day of the week
@@ -50,23 +32,24 @@
       }
     }
   }
-	/**
-     * @param {{ day: any; startMin: any; }} availBlock
-     */
-	function findRowCol(availBlock) {
-		for (var i = 0; i < timeBlocks.length; i++) {
-			let time = timeBlocks[i];
-			if (time.day ==  availBlock.day && time.startMin == availBlock.startMin)
-				return {row: time.row, col: time.col};
-		}
-		return null;	
-	}
+	// function findRowCol(availBlock) {
+	// 	for (var i = 0; i < timeBlocks.length; i++) {
+	// 		let time = timeBlocks[i];
+	// 		if (time.day ==  availBlock.day && time.startMin == availBlock.startMin)
+	// 			return {row: time.row, col: time.col};
+	// 	}
+	// 	return null;	
+	// }
 
   // Adds new availability block to calendar
+  /**
+     * @param {number} row
+     * @param {any} col
+     */
   function addNewAvailibity(row, col) {
     let time = (row - 1) * 30
     console.log(time)
-    availabilities.push({title:time,className:"task--primary",len:2, startRow: row, startCol: col, day: "Tue"});
+    availabilities.push({title:time,className:"task--primary",len:1, startRow: row, startCol: col, day: "Tue"});
     availabilities = availabilities
     console.log(row, col)
   }
@@ -85,35 +68,19 @@
         {#each timeBlocks as block}
           {#if block.col == 0 && (block.startMin % 60) == 0}
             <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{block.startMin / 60}:00 EST</span>
-            <!-- <span class="time"></span> -->
           {:else if block.col == 0 && (block.startMin % 60) == 30}
-            <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{(block.startMin-30) / 60}:30 EST</span>
-            <!-- <span class="time"></span> -->
+            <span class="time" style="gr id-row: {block.row + 1}; grid-column: {block.col + 1};">{(block.startMin-30) / 60}:30 EST</span>
           {:else}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <span on:click={() => addNewAvailibity(block.row + 1, block.col + 1)} class="day" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};"></span>
-            <!-- <span class="test" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">No</span> -->
-  
+            <span 
+              on:click={() => addNewAvailibity(block.row + 1, block.col + 1)} 
+              class="day" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};"></span>
           {/if}
         {/each}
 
             
         {#each availabilities as availBlock}
           <AvailBlock {availBlock} />
-            <!-- <section
-                class="task {item.className}"
-                style="grid-column: {item.startCol};      
-                grid-row: {item.startRow} / span 1;  
-                align-self: {item.isBottom?'end':'center'};"
-                >
-                {item.title}
-                {#if item.detailHeader}
-                <div class="task-detail">
-                    <h2>{item.detailHeader}</h2>
-                    <p>{item.detailContent}</p>
-                </div>
-                {/if}
-            </section> -->
         {/each}
     </div>
 </div>
