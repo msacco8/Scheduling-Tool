@@ -8,8 +8,10 @@
      * @type {HTMLElement}
      */
       let this_avail;
+      let hitRadius = 15;
       $: isBottomDraggable = false;
       $: isTopDraggable = false;
+      $: prevMouseY = 0;
 
       
       /**
@@ -18,14 +20,17 @@
     function handleExtendOnDrag(e) {
       let clickY = e.clientY;
       let blockTop = this_avail.offsetTop;
-      let hitRadius = 15;
       let blockBottom = blockTop + this_avail.offsetHeight;
+      console.log(e);
+      console.log("Click y:", clickY, "Block top:", blockTop);
 
       if(blockTop + hitRadius >= clickY && blockTop <= clickY) {
         isTopDraggable = true;
+        prevMouseY = blockTop + hitRadius;
         console.log("top is draggable");
       } else if(blockBottom - hitRadius <= clickY && blockBottom >= clickY) {
         isBottomDraggable = true;
+        prevMouseY = blockBottom - hitRadius;
         console.log("bottom is draggable");
       }
     }
@@ -33,24 +38,45 @@
     /**
      * @param {any} e
      */
+    // This handles the drag and extend movement of an AvailBlock
     function handleMouseMove(e) {
-      if (isTopDraggable && availBlock.startRow > 0) {
-        availBlock.startRow -= 1;
-        availBlock.len += 1;
+      let clickY = e.clientY;
+      // console.log(clickY);
+      if (isTopDraggable) {
+        // Extending top of block
+        if (clickY <= prevMouseY - 10 && availBlock.startRow > 0) {
+          prevMouseY = clickY;
+          availBlock.startRow -= 1;
+          availBlock.len += 1;
+        }
+        // Trimming top of block
+        if (clickY >= prevMouseY + 10 && availBlock.len > 1) {
+          prevMouseY = clickY;
+          availBlock.startRow += 1;
+          availBlock.len -= 1;
+        }
       }
+
       if (isBottomDraggable) {
-        availBlock.len += 1;
+        // Extending bottom of block
+        if (clickY >= prevMouseY + 10) {
+          prevMouseY = clickY;
+          availBlock.len += 1;
+        }
+        // Trimming bottom of block
+        if (clickY <= prevMouseY - 10 && availBlock.len > 1) {
+          prevMouseY = clickY;
+          availBlock.len -= 1;
+        }
       }
-      console.log(availBlock.len);
-      console.log("Mouse moved");
     }
 
     /**
      * @param {any} e
      */
     function handleMouseLeave(e) {
+      prevMouseY = this_avail.offsetTop - (this_avail.offsetHeight / 2)
       isBottomDraggable = false;
-      console.log("leaving")
       isTopDraggable = false;
     }
 </script>
@@ -62,7 +88,7 @@
     on:mouseup={handleMouseLeave}
     bind:this={this_avail}
     class="task {availBlock.className}"
-    style="grid-column: {availBlock.startCol};      
+    style="grid-column: {availBlock.startCol};  
     grid-row: {availBlock.startRow} / span {availBlock.len};  
     align-self: {availBlock.isBottom?'end':'center'};"
     >

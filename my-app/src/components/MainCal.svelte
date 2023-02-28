@@ -98,7 +98,7 @@
   margin: auto;
   overflow: hidden;
   border-radius: 10px;
-  background: #fff;
+  background: rgba(0, 0, 0, 0);
   max-width: 1200px;
 }
 .calendar {
