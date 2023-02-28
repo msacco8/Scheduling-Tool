@@ -1,6 +1,7 @@
 
 <script>
 	import {createEventDispatcher, onMount} from 'svelte';
+  import AvailBlock from './AvailBlock.svelte';
 
 	var dayNames = [["", ""], ["Sun", "28"], ["Mon", "29"], ["Tue", "30"], ["Wed", "31"], ["Thu", "32"], ["Fri", "33"], ["Sat", "34"]];
 	/**
@@ -13,21 +14,21 @@
      */
   $: availabilities = [];
 	function initAvailabilities() {
-		availabilities=[
-			{title:"11:00 Task Early in month",className:"task--primary",len:2, startMin: 30, day: "Tue"},
-		];
+		// availabilities=[
+		// 	{title:"11:00 Task Early in month",className:"task--primary",len:2, startMin: 30, day: "Tue"},
+		// ];
 
 		//This is where you calc the row/col to put each dated item
-		for (let avail of availabilities) {
-      console.log(avail);
-			let rc = findRowCol(avail);
-      console.log(rc);
-			if (rc == null) {
-			} else {
-				avail.startCol = rc.col;
-				avail.startRow = rc.row;
-			}
-		}
+		// for (let avail of availabilities) {
+    //   console.log(avail);
+		// 	let rc = findRowCol(avail);
+    //   console.log(rc);
+		// 	if (rc == null) {
+		// 	} else {
+		// 		avail.startCol = rc.col;
+		// 		avail.startRow = rc.row;
+		// 	}
+		// }
 	}
 
 	$: initContent();
@@ -62,9 +63,12 @@
 	}
 
   // Adds new availability block to calendar
-  function addNewAvailibity() {
-    availabilities.push({title:"11:00 Task Early in month",className:"task--primary",len:2, startMin: 60, day: "Tue"});
+  function addNewAvailibity(row, col) {
+    let time = (row - 1) * 30
+    console.log(time)
+    availabilities.push({title:time,className:"task--primary",len:2, startRow: row, startCol: col, day: "Tue"});
     availabilities = availabilities
+    console.log(row, col)
   }
 </script>
 
@@ -80,20 +84,26 @@
     <div class="calendar-body">
         {#each timeBlocks as block}
           {#if block.col == 0 && (block.startMin % 60) == 0}
-            <span class="time">{block.startMin / 60}:00 EST</span>
+            <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{block.startMin / 60}:00 EST</span>
+            <!-- <span class="time"></span> -->
           {:else if block.col == 0 && (block.startMin % 60) == 30}
-            <span class="time">{(block.startMin-30) / 60}:30 EST</span>
+            <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{(block.startMin-30) / 60}:30 EST</span>
+            <!-- <span class="time"></span> -->
           {:else}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <span on:click={addNewAvailibity} class="day"></span>
+            <span on:click={() => addNewAvailibity(block.row + 1, block.col + 1)} class="day" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};"></span>
+            <!-- <span class="test" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">No</span> -->
+  
           {/if}
         {/each}
+
             
-        {#each availabilities as item}
-            <section
+        {#each availabilities as availBlock}
+          <AvailBlock {availBlock} />
+            <!-- <section
                 class="task {item.className}"
                 style="grid-column: {item.startCol};      
-                grid-row: {item.startRow};  
+                grid-row: {item.startRow} / span 1;  
                 align-self: {item.isBottom?'end':'center'};"
                 >
                 {item.title}
@@ -103,7 +113,7 @@
                     <p>{item.detailContent}</p>
                 </div>
                 {/if}
-            </section>
+            </section> -->
         {/each}
     </div>
 </div>
@@ -111,6 +121,11 @@
 
 	
 <style>
+
+.test {
+  position: relative;
+  z-index: 2;
+}
 .calendar-container {
   width: 90%;
   margin: auto;
@@ -135,6 +150,19 @@
   grid-template-rows: 50px;
   grid-auto-rows: 50px;
   overflow-y: scroll;
+  z-index: 1
+}
+
+.calendar-body-availblocks {
+  display: grid;
+  width: 100%;
+  height: 500px;
+  grid-template-columns: repeat(8, minmax(120px, 1fr));
+  grid-template-rows: 50px;
+  grid-auto-rows: 50px;
+  overflow-y: scroll;
+  position: relative;
+  z-index: 2
 }
 .day {
   border-top: 1px solid #DCDCDC;
@@ -174,88 +202,5 @@
   color: #e9a1a7;
   text-align: center;
   font-weight: 500;
-}
-.task {
-  border-left-width: 3px;
-  padding: 8px 12px;
-  margin: 10px;
-  border-left-style: solid;
-  font-size: 14px;
-  position: relative;
-  align-self: center;
-	z-index:2;
-	border-radius: 15px;
-}
-.task--warning {
-  border-left-color: #fdb44d;
-  background: #fef0db;
-  color: #fc9b10;
-  margin-top: -5px;
-}
-.task--danger {
-  border-left-color: #fa607e;
-  grid-column: 2 / span 3;
-  grid-row: 3;
-  margin-top: 15px;
-  background: rgba(253, 197, 208, 0.7);
-  color: #f8254e;
-}
-.task--info {
-  border-left-color: #4786ff;
-  margin-top: 15px;
-  background: rgba(218, 231, 255, 0.7);
-  color: #0a5eff;
-}
-.task--primary {
-  background: #4786ff;
-  border: 0;
-  border-radius: 14px;
-  color: #f00;
-  box-shadow: 0 10px 14px rgba(71, 134, 255, 0.4);
-}
-.task-detail {
-  position: absolute;
-  left: 0;
-  top: calc(100% + 8px);
-  background: #efe;
-  border: 1px solid rgba(166, 168, 179, 0.2);
-  color: #100;
-  padding: 20px;
-  box-sizing: border-box;
-  border-radius: 14px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-  z-index: 2;
-}
-.task-detail:after, .task-detail:before {
-  bottom: 100%;
-  left: 30%;
-  border: solid transparent;
-  content: " ";
-  height: 100%;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-}
-.task-detail:before {
-  border-bottom-color: rgba(166, 168, 179, 0.2);
-  border-width: 8px;
-  margin-left: -8px;
-}
-.task-detail:after {
-  border-bottom-color: #fff;
-  border-width: 6px;
-  margin-left: -6px;
-}
-.task-detail h2 {
-  font-size: 15px;
-  margin: 0;
-  color: #91565d;
-}
-.task-detail p {
-  margin-top: 4px;
-  font-size: 12px;
-  margin-bottom: 0;
-  font-weight: 500;
-  color: rgba(81, 86, 93, 0.7);
 }
 </style>
