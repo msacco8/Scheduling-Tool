@@ -8,6 +8,7 @@
      * @type {any[]}
      */
 	var timeBlocks = [];
+  var timeBlocksMatrix = []
 	
  /**
      * @type {any[]}
@@ -25,21 +26,16 @@
   function initTimeBlocks() {
     timeBlocks = [];
 
-    for (var i = 0; i < 48; i++) {
+    for (var i = 0; i < 96; i++) {
+      var matrixRow = [];
       for (var j = 0; j < 8; j++) {
         // Note the structure of a time block
-        timeBlocks.push({row: i, col: j, day: dayNames[j][0], startMin: i * 30})
+        timeBlocks.push({row: i, col: j, day: dayNames[j][0], startMin: i * 15})
+        matrixRow.push(0);
       }
+      timeBlocksMatrix.push(matrixRow);
     }
   }
-	// function findRowCol(availBlock) {
-	// 	for (var i = 0; i < timeBlocks.length; i++) {
-	// 		let time = timeBlocks[i];
-	// 		if (time.day ==  availBlock.day && time.startMin == availBlock.startMin)
-	// 			return {row: time.row, col: time.col};
-	// 	}
-	// 	return null;	
-	// }
 
   // Adds new availability block to calendar
   /**
@@ -49,7 +45,7 @@
   function addNewAvailibity(row, col) {
     let time = (row - 1) * 30
     console.log(time)
-    availabilities.push({title:time,className:"task--primary",len:1, startRow: row, startCol: col, day: "Tue"});
+    availabilities.push({title:time,className:"task--primary",len:2, startRow: row, startCol: col, day: "Tue"});
     availabilities = availabilities
     console.log(row, col)
   }
@@ -69,12 +65,21 @@
           {#if block.col == 0 && (block.startMin % 60) == 0}
             <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{block.startMin / 60}:00 EST</span>
           {:else if block.col == 0 && (block.startMin % 60) == 30}
-            <span class="time" style="gr id-row: {block.row + 1}; grid-column: {block.col + 1};">{(block.startMin-30) / 60}:30 EST</span>
+            <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{(block.startMin-30) / 60}:30 EST</span>
+          {:else if block.col == 0 && (block.startMin % 30) == 15}
+            <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};"></span>
           {:else}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <span 
+            {#if (block.startMin % 30) == 15}
+              <!-- svelte-ignore a11y-click-events-have-key-events -->
+              <span 
+              on:click={() => addNewAvailibity(block.row + 1, block.col + 1)} 
+              class="day" style="grid-row: {block.row + 1}; grid-column: {block.col + 1}; border-top: 0;"></span>
+            {:else}
+              <!-- svelte-ignore a11y-click-events-have-key-events -->
+              <span 
               on:click={() => addNewAvailibity(block.row + 1, block.col + 1)} 
               class="day" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};"></span>
+            {/if}
           {/if}
         {/each}
 
@@ -114,8 +119,8 @@
   width: 100%;
   height: 500px;
   grid-template-columns: repeat(8, minmax(120px, 1fr));
-  grid-template-rows: 50px;
-  grid-auto-rows: 50px;
+  grid-template-rows: 25px;
+  grid-auto-rows: 25px;
   overflow-y: scroll;
   z-index: 1
 }

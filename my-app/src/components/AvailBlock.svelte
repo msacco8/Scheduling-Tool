@@ -8,7 +8,7 @@
      * @type {HTMLElement}
      */
       let this_avail;
-      let hitRadius = 15;
+      let hitRadius = 20;
       $: isBottomDraggable = false;
       $: isTopDraggable = false;
       $: prevMouseY = 0;
@@ -44,13 +44,13 @@
       // console.log(clickY);
       if (isTopDraggable) {
         // Extending top of block
-        if (clickY <= prevMouseY - 10 && availBlock.startRow > 0) {
+        if (clickY <= prevMouseY - 15 && availBlock.startRow > 0) {
           prevMouseY = clickY;
           availBlock.startRow -= 1;
           availBlock.len += 1;
         }
         // Trimming top of block
-        if (clickY >= prevMouseY + 10 && availBlock.len > 1) {
+        if (clickY >= prevMouseY + 15 && availBlock.len > 1) {
           prevMouseY = clickY;
           availBlock.startRow += 1;
           availBlock.len -= 1;
@@ -59,12 +59,12 @@
 
       if (isBottomDraggable) {
         // Extending bottom of block
-        if (clickY >= prevMouseY + 10) {
+        if (clickY >= prevMouseY + 15) {
           prevMouseY = clickY;
           availBlock.len += 1;
         }
         // Trimming bottom of block
-        if (clickY <= prevMouseY - 10 && availBlock.len > 1) {
+        if (clickY <= prevMouseY - 15 && availBlock.len > 1) {
           prevMouseY = clickY;
           availBlock.len -= 1;
         }

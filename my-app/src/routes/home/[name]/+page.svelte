@@ -1,6 +1,13 @@
 <script>
+      // @ts-ignore
       import MainCal from '/src/components/MainCal.svelte'
+      // @ts-ignore
       import RightPanel from '/src/components/RightPanel.svelte'
+
+       /**
+     * @type {{ username: any; }}
+     */
+        export let data;
 </script>
 
 <div>
@@ -10,7 +17,7 @@
                   <p>February 28-34, 2023</p>
                   <MainCal/>
             </div>
-            <RightPanel/>
+            <RightPanel username={data.username}/>
       </div>
 </div>
 

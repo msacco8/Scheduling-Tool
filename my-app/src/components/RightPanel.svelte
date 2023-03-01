@@ -1,11 +1,31 @@
+<script>
+    import ToolTips from './ToolTips.svelte';
+    
+    export let username = "";
+</script>
+
 <div class="right-panel">
-    Right panel
+    <div class="right-panel-container">
+        <p>{username}</p>
+    </div>
+    <div class="right-panel-container">
+    </div>
+    <div class="right-panel-container">
+        <ToolTips/>
+    </div>
     <p><a href="/recommendation">Submit Availablity</a></p>
 </div>
 
 <style>
     .right-panel {
         background-color: white;
-        width: 30%;
+        width: 25%;
+        padding: 20px;
+    }
+    .right-panel-container {
+        margin-bottom: 20px;
+        padding: 5px;
+        box-shadow: 0px 0px 0px 1px #E4E4E4;
+        border-radius: 8px;
     }
 </style>
