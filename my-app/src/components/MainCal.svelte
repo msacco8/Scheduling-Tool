@@ -11,6 +11,9 @@
      * @type {any[]}
      */
 	var timeBlocks = [];
+  /**
+     * @type {number[][]}
+     */
   var timeBlocksMatrix = []
 	
  /**
@@ -46,11 +49,24 @@
      * @param {any} col
      */
   function addNewAvailibity(row, col) {
-    let time = (row - 1) * 30
-    console.log(time)
-    availabilities.push({title:time,className:"task--primary",len:2, startRow: row, startCol: col, day: "Tue"});
-    availabilities = availabilities
-    console.log(row, col)
+    let isBlockAvailable = 0;
+    for (let i = 0; i < 2; i++) {
+      isBlockAvailable += timeBlocksMatrix[row+i][col]
+    }
+
+    if (isBlockAvailable == 0) {
+      let time = (row - 1) * 30
+      console.log(time)
+      availabilities.push({title:time,className:"task--primary",len:2, startRow: row, startCol: col, day: "Tue"});
+
+      // Assigning spot in matrix as used by this availBlock 
+      for (let i = 0; i < availabilities[availabilities.length-1].len; i++) {
+        timeBlocksMatrix[row+i][col] = 1;
+      }
+      
+      availabilities = availabilities
+      console.log(row, col)
+    }
   }
 </script>
 
@@ -88,7 +104,7 @@
 
             
         {#each availabilities as availBlock}
-          <AvailBlock {availBlock} />
+          <AvailBlock availBlock={availBlock} calendarMatrix={timeBlocksMatrix} />
         {/each}
     </div>
 </div>

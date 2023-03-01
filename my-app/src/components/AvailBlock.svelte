@@ -4,6 +4,10 @@
      * @type {{ className: any; startCol: any; startRow: any; len: any; isBottom: any; title: any; }}
      */
        export let availBlock;
+         /**
+       * @type {number[][]}
+        */
+       export let calendarMatrix;
       /**
      * @type {HTMLElement}
      */
@@ -13,7 +17,16 @@
       $: isTopDraggable = false;
       $: prevMouseY = 0;
 
-      
+      /**
+     * @param {number} row
+     * @param {number} col
+     */
+      function isTimeBlockAvailable(row, col) {
+        if (calendarMatrix[row][col] == 0) {
+          return true;
+        }
+        return false
+      }
       /**
      * @param {any} e
      */
@@ -41,32 +54,37 @@
     // This handles the drag and extend movement of an AvailBlock
     function handleMouseMove(e) {
       let clickY = e.clientY;
+      let thisCol = availBlock.startCol;
       // console.log(clickY);
       if (isTopDraggable) {
         // Extending top of block
-        if (clickY <= prevMouseY - 15 && availBlock.startRow > 0) {
+        if (clickY <= prevMouseY - 15 && availBlock.startRow > 0 && isTimeBlockAvailable(availBlock.startRow-1, thisCol)) {
           prevMouseY = clickY;
           availBlock.startRow -= 1;
           availBlock.len += 1;
+          calendarMatrix[availBlock.startRow][thisCol] = 1;
         }
         // Trimming top of block
         if (clickY >= prevMouseY + 15 && availBlock.len > 1) {
           prevMouseY = clickY;
           availBlock.startRow += 1;
           availBlock.len -= 1;
+          calendarMatrix[availBlock.startRow-1][thisCol] = 0;
         }
       }
 
       if (isBottomDraggable) {
         // Extending bottom of block
-        if (clickY >= prevMouseY + 15) {
+        if (clickY >= prevMouseY + 15 && isTimeBlockAvailable(availBlock.startRow + availBlock.len, thisCol)) {
           prevMouseY = clickY;
           availBlock.len += 1;
+          calendarMatrix[availBlock.startRow + availBlock.len-1][thisCol] = 1;
         }
         // Trimming bottom of block
         if (clickY <= prevMouseY - 15 && availBlock.len > 1) {
           prevMouseY = clickY;
           availBlock.len -= 1;
+          calendarMatrix[availBlock.startRow + availBlock.len][thisCol] = 0;
         }
       }
     }
