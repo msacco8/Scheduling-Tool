@@ -3,6 +3,9 @@
 	import {createEventDispatcher, onMount} from 'svelte';
   import AvailBlock from './AvailBlock.svelte';
 
+  export let selectedBlockID;
+  console.log("MainCal selectedBlockID: " + selectedBlockID)
+
 	var dayNames = [["", ""], ["Sun", "28"], ["Mon", "29"], ["Tue", "30"], ["Wed", "31"], ["Thu", "32"], ["Fri", "33"], ["Sat", "34"]];
 	/**
      * @type {any[]}

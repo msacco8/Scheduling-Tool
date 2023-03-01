@@ -8,6 +8,8 @@
      * @type {{ username: any; }}
      */
         export let data;
+
+      let selectedBlockID = 'hey'
 </script>
 
 <div>
@@ -15,9 +17,9 @@
             <div>
                   <h1>Scheduling a Meeting</h1>
                   <p>February 28-34, 2023</p>
-                  <MainCal/>
+                  <MainCal bind:selectedBlockID={selectedBlockID}/>
             </div>
-            <RightPanel username={data.username}/>
+            <RightPanel username={data.username} bind:selectedBlockID={selectedBlockID}/>
       </div>
 </div>
 

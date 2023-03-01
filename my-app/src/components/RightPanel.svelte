@@ -1,14 +1,18 @@
 <script>
     import ToolTips from './ToolTips.svelte';
+    import EditPanel from './EditPanel.svelte';
     
     export let username = "";
+    export let selectedBlockID;
+    console.log("RightPanel selectedBlock: " + selectedBlockID)
 </script>
 
 <div class="right-panel">
     <div class="right-panel-container">
         <p>{username}</p>
     </div>
-    <div class="right-panel-container">
+    <div class="right-panel-container editing">
+        <EditPanel selectedBlockID={"heyyo"}/>
     </div>
     <div class="right-panel-container">
         <ToolTips/>
@@ -27,5 +31,8 @@
         padding: 5px;
         box-shadow: 0px 0px 0px 1px #E4E4E4;
         border-radius: 8px;
+    }
+    .editing {
+        height: 50%;
     }
 </style>
