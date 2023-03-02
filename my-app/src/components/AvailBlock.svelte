@@ -3,7 +3,8 @@
       /**
      * @type {{ className: any; startCol: any; startRow: any; len: any; isBottom: any; title: any; }}
      */
-       export let availBlock;
+    export let availBlock;
+    export let selectedBlockID;
          /**
        * @type {number[][]}
         */
@@ -97,6 +98,10 @@
       isBottomDraggable = false;
       isTopDraggable = false;
     }
+
+    function handleDoubleClick(e) {
+        selectedBlockID = availBlock.id
+    }
 </script>
 
 <section
@@ -104,6 +109,7 @@
     on:mousemove={handleMouseMove}
     on:mouseleave={handleMouseLeave}
     on:mouseup={handleMouseLeave}
+    on:dblclick={handleDoubleClick}
     bind:this={this_avail}
     class="task {availBlock.className}"
     style="grid-column: {availBlock.startCol};  

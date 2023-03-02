@@ -3,7 +3,10 @@
     import EditPanel from './EditPanel.svelte';
     
     export let username = "";
-    export let selectedBlockID;
+    /**
+     * @type {string}
+     */
+     export let selectedBlockID;
     console.log("RightPanel selectedBlock: " + selectedBlockID)
 </script>
 
@@ -12,7 +15,7 @@
         <p>{username}</p>
     </div>
     <div class="right-panel-container editing">
-        <EditPanel selectedBlockID={"heyyo"}/>
+        <EditPanel bind:selectedBlockID={selectedBlockID}/>
     </div>
     <div class="right-panel-container">
         <ToolTips/>

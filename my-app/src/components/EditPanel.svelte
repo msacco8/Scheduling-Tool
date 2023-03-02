@@ -1,6 +1,9 @@
 <script>
 
-    export let selectedBlockID;
+    /**
+     * @type {string}
+     */
+     export let selectedBlockID;
     
 </script>
 

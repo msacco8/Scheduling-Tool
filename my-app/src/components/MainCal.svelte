@@ -3,7 +3,12 @@
 	import {createEventDispatcher, onMount} from 'svelte';
   import AvailBlock from './AvailBlock.svelte';
 
+  // @ts-ignore
+  /**
+     * @type {string}
+     */
   export let selectedBlockID;
+  export let currentBlocks;
   console.log("MainCal selectedBlockID: " + selectedBlockID)
 
 	var dayNames = [["", ""], ["Sun", "28"], ["Mon", "29"], ["Tue", "30"], ["Wed", "31"], ["Thu", "32"], ["Fri", "33"], ["Sat", "34"]];
@@ -19,7 +24,7 @@
  /**
      * @type {any[]}
      */
-   $: availabilities = [];
+  $: availabilities = [];
 
 	$: initContent();
   
@@ -57,7 +62,15 @@
     if (isBlockAvailable == 0) {
       let time = (row - 1) * 30
       console.log(time)
-      availabilities.push({title:time,className:"task--primary",len:2, startRow: row, startCol: col, day: "Tue"});
+      availabilities.push({
+        title: time,
+        className: "task--primary",
+        len: 2,
+        startRow: row,
+        startCol: col,
+        id: "id" + row + ":" + col,
+        day: "Tue"
+      });
 
       // Assigning spot in matrix as used by this availBlock 
       for (let i = 0; i < availabilities[availabilities.length-1].len; i++) {
@@ -65,8 +78,13 @@
       }
       
       availabilities = availabilities
-      console.log(row, col)
+      console.log(availabilities)
     }
+  }
+
+  function handleSelectBlock(e) {
+    console.log("double clicked")
+
   }
 </script>
 
@@ -104,7 +122,11 @@
 
             
         {#each availabilities as availBlock}
-          <AvailBlock availBlock={availBlock} calendarMatrix={timeBlocksMatrix} />
+          <AvailBlock 
+            bind:availBlock={availBlock}
+            bind:selectedBlockID={selectedBlockID}
+            calendarMatrix={timeBlocksMatrix}
+          />
         {/each}
     </div>
 </div>
