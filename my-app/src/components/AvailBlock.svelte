@@ -1,10 +1,21 @@
 <script>
+// @ts-nocheck
 
-      /**
-     * @type {{ className: any; startCol: any; startRow: any; len: any; isBottom: any; title: any; }}
-     */
+
+    import { onMount } from "svelte";
+    import { v4 as uuidv4 } from 'uuid';
+
+    // cell drag select svelte
+
     export let availBlock;
-    export let selectedBlockID;
+    /**
+     * @type {any}
+     */
+     export let availabilities;
+    /**
+     * @type {string}
+     */
+     export let selectedBlockID;
          /**
        * @type {number[][]}
         */
@@ -13,6 +24,10 @@
      * @type {HTMLElement}
      */
       let this_avail;
+      /**
+     * @type {string}
+     */
+      let blockID;
       let hitRadius = 15;
       $: isBottomDraggable = false;
       $: isTopDraggable = false;
@@ -35,8 +50,8 @@
       let clickY = e.clientY;
       let blockTop = this_avail.offsetTop;
       let blockBottom = blockTop + this_avail.offsetHeight;
-      console.log(e);
-      console.log("Click y:", clickY, "Block bottom:", blockBottom);
+    //   console.log(e);
+    //   console.log("Click y:", clickY, "Block bottom:", blockBottom);
 
       if(blockTop + hitRadius >= clickY && blockTop <= clickY) {
         isTopDraggable = true;
@@ -61,6 +76,7 @@
         // Extending top of block
         console.log(prevMouseY);
         if (clickY <= prevMouseY - 15 && availBlock.startRow > 0 && isTimeBlockAvailable(availBlock.startRow-1, thisCol)) {
+          selectedBlockID = availBlock.id
           prevMouseY = clickY;
           availBlock.startRow -= 1;
           availBlock.len += 1;
@@ -69,6 +85,7 @@
         }
         // Trimming top of block
         if (clickY >= prevMouseY + 15 && availBlock.len > 1) {
+          selectedBlockID = availBlock.id
           prevMouseY = clickY;
           availBlock.startRow += 1;
           availBlock.len -= 1;
@@ -79,12 +96,14 @@
       if (isBottomDraggable) {
         // Extending bottom of block
         if (clickY >= prevMouseY + 15 && isTimeBlockAvailable(availBlock.startRow + availBlock.len, thisCol)) {
+          selectedBlockID = availBlock.id
           prevMouseY = clickY;
           availBlock.len += 1;
           calendarMatrix[availBlock.startRow + availBlock.len-1][thisCol] = 1;
         }
         // Trimming bottom of block
         if (clickY <= prevMouseY - 15 && availBlock.len > 1) {
+          selectedBlockID = availBlock.id
           prevMouseY = clickY;
           availBlock.len -= 1;
           calendarMatrix[availBlock.startRow + availBlock.len][thisCol] = 0;
@@ -105,9 +124,20 @@
      * @param {any} e
      */
     function handleDoubleClick(e) {
-      console.log("Double click")
-        selectedBlockID = availBlock.id;
+      console.log("Double clicked block: ")
+      console.log(availBlock)
+      selectedBlockID = availBlock.id;
+      console.log("In double click function, Selected Block ID: " + selectedBlockID)
     }
+
+    onMount(async() => {
+        // console.log("updating availabilities in availblock: ")
+        // console.log(availabilities)
+        // console.log("Mounting : " + availBlock.startCol)
+        selectedBlockID = availBlock.id
+    })
+
+
 </script>
 
 <section
@@ -117,7 +147,8 @@
     on:mouseup={handleMouseLeave}
     on:dblclick={handleDoubleClick}
     bind:this={this_avail}
-    class="task {availBlock.className}"
+    id={availBlock.id}
+    class="task {availBlock.className} {availBlock.availability}"
     style="grid-column: {availBlock.startCol};  
     grid-row: {availBlock.startRow} / span {availBlock.len};  
     align-self: {availBlock.isBottom?'end':'center'};"
@@ -126,6 +157,9 @@
 </section>
 
 <style>
+.ifneeded {
+    background: orange !important;
+}
 .task {
   border-left-width: 3px;
   margin-right: 10px;

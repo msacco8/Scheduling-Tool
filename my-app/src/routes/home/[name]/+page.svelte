@@ -1,4 +1,6 @@
 <script>
+    import { afterUpdate } from 'svelte'
+
       // @ts-ignore
       import MainCal from '/src/components/MainCal.svelte'
       // @ts-ignore
@@ -13,7 +15,11 @@
       /**
      * @type {any[]}
      */
-      let currentBlocks = [];
+      let availabilities = [];
+      afterUpdate(() => {
+            console.log("main page avails is: ")
+            console.log(availabilities)
+      })
 </script>
 <body>
       <div class="leftpanel">
@@ -24,13 +30,13 @@
             </div>
             <MainCal
                   bind:selectedBlockID={selectedBlockID}
-                  bind:currentBlocks={currentBlocks}
+                  bind:availabilities={availabilities}
             />
       </div>
       <RightPanel 
       username={data.username}
       bind:selectedBlockID={selectedBlockID}
-      bind:currentBlocks={currentBlocks}
+      bind:availabilities={availabilities}
       />
 </body>
 

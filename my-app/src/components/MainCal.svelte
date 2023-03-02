@@ -2,6 +2,7 @@
 <script>
 	import {createEventDispatcher, onMount} from 'svelte';
   import AvailBlock from './AvailBlock.svelte';
+  import { v4 as uuidv4 } from 'uuid';
 
   // @ts-ignore
   /**
@@ -11,7 +12,7 @@
   /**
      * @type {any}
      */
-   export let currentBlocks;
+  export let availabilities;
   console.log("MainCal selectedBlockID: " + selectedBlockID)
 
 	var dayNames = [["", ""], ["Sun", "28"], ["Mon", "29"], ["Tue", "30"], ["Wed", "31"], ["Thu", "32"], ["Fri", "33"], ["Sat", "34"]];
@@ -27,7 +28,7 @@
  /**
      * @type {any[]}
      */
-  $: availabilities = currentBlocks;
+  // $: availabilities = currentBlocks;
 
 	$: initContent();
   
@@ -69,24 +70,25 @@
         title: time,
         className: "task--primary",
         len: 2,
+        id: uuidv4(),
         startRow: row,
         startCol: col,
-        id: "id" + row + ":" + col,
-        day: "Tue",
-        location: "None",
+        day: dayNames[col + 1],
+        location: "Virtual",
         availability: 1
       }
-      selectedBlockID = blockToAdd.id
+      console.log(blockToAdd)
       availabilities.push(blockToAdd);
 
       // Assigning spot in matrix as used by this availBlock 
       for (let i = 0; i < availabilities[availabilities.length-1].len; i++) {
         timeBlocksMatrix[row+i][col] = 1;
       }
-      
-      availabilities = availabilities
-      console.log(availabilities)
-      console.log(currentBlocks)
+      // console.log("Before updating avail")
+      // console.log(availabilities)
+      // // availabilities = availabilities
+      // console.log("after updating avail")
+      // console.log(availabilities)
     }
   }
 
@@ -127,6 +129,7 @@
             
         {#each availabilities as availBlock}
           <AvailBlock 
+            bind:availabilities={availabilities}
             bind:availBlock={availBlock}
             bind:selectedBlockID={selectedBlockID}
             calendarMatrix={timeBlocksMatrix}

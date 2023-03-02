@@ -1,6 +1,7 @@
 <script>
     import ToolTips from './ToolTips.svelte';
     import EditPanel from './EditPanel.svelte';
+    import { afterUpdate } from 'svelte';
     
     export let username = "";
     /**
@@ -10,8 +11,13 @@
      /**
      * @type {any}
      */
-      export let currentBlocks;
-    console.log("RightPanel selectedBlock: " + selectedBlockID)
+      export let availabilities;
+    afterUpdate(() => {
+        console.log("RightPanel selectedBlock: " + selectedBlockID)
+        console.log("avails in rightpanel is: ")
+        console.log(availabilities)
+    })
+    
 </script>
 
 <div class="right-panel">
@@ -21,7 +27,7 @@
     <div class="right-panel-container editing">
         <EditPanel
             bind:selectedBlockID={selectedBlockID}
-            bind:currentBlocks={currentBlocks}
+            bind:availabilities={availabilities}
         />
     </div>
     <div class="right-panel-container">
