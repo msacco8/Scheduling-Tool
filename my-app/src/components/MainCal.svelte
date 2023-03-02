@@ -136,20 +136,20 @@
 </div>
 
 
-	
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 <style>
-
 .test {
   position: relative;
   z-index: 2;
 }
 .calendar-container {
-  width: 90%;
+  width: 100%;
   margin: auto;
   overflow: hidden;
   border-radius: 10px;
   background: rgba(0, 0, 0, 0);
   max-width: 1200px;
+  user-select: none;
 }
 .calendar {
   display: grid;
@@ -158,6 +158,7 @@
   grid-template-rows: 50px;
   grid-auto-rows: 50px;
   overflow: auto;
+  
 }
 .calendar-body {
   display: grid;
@@ -214,10 +215,12 @@
   border-right: 0;
 }
 .day-name {
-  font-size: 12px;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
   text-transform: uppercase;
-  color: #e9a1a7;
+  color: #B1B1B1;
   text-align: center;
-  font-weight: 500;
 }
 </style>

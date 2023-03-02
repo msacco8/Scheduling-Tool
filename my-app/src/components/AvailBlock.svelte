@@ -13,7 +13,7 @@
      * @type {HTMLElement}
      */
       let this_avail;
-      let hitRadius = 20;
+      let hitRadius = 15;
       $: isBottomDraggable = false;
       $: isTopDraggable = false;
       $: prevMouseY = 0;
@@ -36,11 +36,11 @@
       let blockTop = this_avail.offsetTop;
       let blockBottom = blockTop + this_avail.offsetHeight;
       console.log(e);
-      console.log("Click y:", clickY, "Block top:", blockTop);
+      console.log("Click y:", clickY, "Block bottom:", blockBottom);
 
       if(blockTop + hitRadius >= clickY && blockTop <= clickY) {
         isTopDraggable = true;
-        prevMouseY = blockTop + hitRadius;
+        prevMouseY = blockTop + hitRadius + 10;
         console.log("top is draggable");
       } else if(blockBottom - hitRadius <= clickY && blockBottom >= clickY) {
         isBottomDraggable = true;
@@ -59,10 +59,12 @@
       // console.log(clickY);
       if (isTopDraggable) {
         // Extending top of block
+        console.log(prevMouseY);
         if (clickY <= prevMouseY - 15 && availBlock.startRow > 0 && isTimeBlockAvailable(availBlock.startRow-1, thisCol)) {
           prevMouseY = clickY;
           availBlock.startRow -= 1;
           availBlock.len += 1;
+          console.log(availBlock.len);
           calendarMatrix[availBlock.startRow][thisCol] = 1;
         }
         // Trimming top of block
@@ -99,8 +101,12 @@
       isTopDraggable = false;
     }
 
+    /**
+     * @param {any} e
+     */
     function handleDoubleClick(e) {
-        selectedBlockID = availBlock.id
+      console.log("Double click")
+        selectedBlockID = availBlock.id;
     }
 </script>
 
@@ -116,7 +122,7 @@
     grid-row: {availBlock.startRow} / span {availBlock.len};  
     align-self: {availBlock.isBottom?'end':'center'};"
     >
-    {availBlock.title}
+    <!-- {availBlock.title} -->
 </section>
 
 <style>
@@ -154,7 +160,7 @@
 .task--primary {
   background: #4786ff;
   border: 0;
-  border-radius: 14px;
+  border-radius: 10px;
   color: #f00;
 }
 .task-detail {

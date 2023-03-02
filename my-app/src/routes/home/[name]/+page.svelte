@@ -7,7 +7,7 @@
        /**
      * @type {{ username: any; }}
      */
-        export let data;
+      export let data;
 
       let selectedBlockID = '';
       /**
@@ -15,29 +15,45 @@
      */
       let currentBlocks = [];
 </script>
-
-<div>
-      <div class="home">
-            <div>
-                  <h1>Scheduling a Meeting</h1>
+<body>
+      <div class="leftpanel">
+            <h1>Scheduling a Meeting</h1>
+            <div class="subheader">
                   <p>February 28-34, 2023</p>
-                  <MainCal
-                        bind:selectedBlockID={selectedBlockID}
-                        bind:currentBlocks={currentBlocks}
-                  />
+                  <button>Add new</button>
             </div>
-            <RightPanel 
-                  username={data.username}
+            <MainCal
                   bind:selectedBlockID={selectedBlockID}
                   bind:currentBlocks={currentBlocks}
             />
       </div>
-</div>
+      <RightPanel 
+      username={data.username}
+      bind:selectedBlockID={selectedBlockID}
+      bind:currentBlocks={currentBlocks}
+      />
+</body>
 
+
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 <style>
- .home {
+ body{
+      font-family: 'Montserrat';
+      background-color: #F9FAFC; 
       display: flex;
       flex-wrap: wrap;  
-      background-color: #F9FAFC;  
+      justify-content: space-between;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
  }   
+ .subheader{
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;   
+      margin-bottom: 50px;  
+ }
+ .leftpanel{
+      justify-content: space-between;
+ }
 </style>
