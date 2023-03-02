@@ -9,7 +9,7 @@
      */
         export let data;
 
-      let selectedBlockID = 'no';
+      let selectedBlockID = '';
       /**
      * @type {any[]}
      */
@@ -26,7 +26,11 @@
                         bind:currentBlocks={currentBlocks}
                   />
             </div>
-            <RightPanel username={data.username} bind:selectedBlockID={selectedBlockID}/>
+            <RightPanel 
+                  username={data.username}
+                  bind:selectedBlockID={selectedBlockID}
+                  bind:currentBlocks={currentBlocks}
+            />
       </div>
 </div>
 

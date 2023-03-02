@@ -7,6 +7,10 @@
      * @type {string}
      */
      export let selectedBlockID;
+     /**
+     * @type {any}
+     */
+      export let currentBlocks;
     console.log("RightPanel selectedBlock: " + selectedBlockID)
 </script>
 
@@ -15,7 +19,10 @@
         <p>{username}</p>
     </div>
     <div class="right-panel-container editing">
-        <EditPanel bind:selectedBlockID={selectedBlockID}/>
+        <EditPanel
+            bind:selectedBlockID={selectedBlockID}
+            bind:currentBlocks={currentBlocks}
+        />
     </div>
     <div class="right-panel-container">
         <ToolTips/>

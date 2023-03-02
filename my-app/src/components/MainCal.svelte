@@ -8,7 +8,10 @@
      * @type {string}
      */
   export let selectedBlockID;
-  export let currentBlocks;
+  /**
+     * @type {any}
+     */
+   export let currentBlocks;
   console.log("MainCal selectedBlockID: " + selectedBlockID)
 
 	var dayNames = [["", ""], ["Sun", "28"], ["Mon", "29"], ["Tue", "30"], ["Wed", "31"], ["Thu", "32"], ["Fri", "33"], ["Sat", "34"]];
@@ -24,7 +27,7 @@
  /**
      * @type {any[]}
      */
-  $: availabilities = [];
+  $: availabilities = currentBlocks;
 
 	$: initContent();
   
@@ -62,15 +65,19 @@
     if (isBlockAvailable == 0) {
       let time = (row - 1) * 30
       console.log(time)
-      availabilities.push({
+      let blockToAdd = {
         title: time,
         className: "task--primary",
         len: 2,
         startRow: row,
         startCol: col,
         id: "id" + row + ":" + col,
-        day: "Tue"
-      });
+        day: "Tue",
+        location: "None",
+        availability: 1
+      }
+      selectedBlockID = blockToAdd.id
+      availabilities.push(blockToAdd);
 
       // Assigning spot in matrix as used by this availBlock 
       for (let i = 0; i < availabilities[availabilities.length-1].len; i++) {
@@ -79,13 +86,10 @@
       
       availabilities = availabilities
       console.log(availabilities)
+      console.log(currentBlocks)
     }
   }
 
-  function handleSelectBlock(e) {
-    console.log("double clicked")
-
-  }
 </script>
 
 
