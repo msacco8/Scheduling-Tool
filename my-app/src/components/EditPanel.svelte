@@ -36,7 +36,7 @@
         // update fields of selected block
         let newTimes = getLength(data.start, data.end)
         currentBlock.startRow = newTimes[0] + 1
-        currentBlock.length = newTimes[1]
+        currentBlock.len = newTimes[1]
         currentBlock.location = data.location;
         currentBlock.availability = data.availability;
         
@@ -75,8 +75,8 @@
         // console.log("start minutes" + mStart);
         let startBlocks = (hStart * 4) + Math.floor(mStart / 15)
         let endBlocks = (hEnd * 4) + Math.floor(mEnd / 15)
-        // console.log(startBlocks) 
-        // console.log(endBlocks)
+        console.log(startBlocks) 
+        console.log(endBlocks)
         return [startBlocks, endBlocks - startBlocks]
         
      }
