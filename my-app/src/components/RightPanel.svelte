@@ -33,7 +33,7 @@
     <div class="right-panel-container">
         <ToolTips/>
     </div>
-    <p><a href="/recommendation">Submit Availablity</a></p>
+    <a href="/recommendation"><button class="button">Submit Availablity</button></a>
 </div>
 
 <style>
@@ -50,5 +50,24 @@
     }
     .editing {
         height: 50%;
+    }
+    .button{
+        width: 100%;
+        height: 47px;
+        border:1px solid transparent;
+        color: white;
+        font-size: 16px;
+
+        background: #5272E9;
+        border-radius: 5px;
+    }
+    .button:hover {
+        box-shadow: 0 5px 10px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.1);
+    }
+
+    .button:active {
+        width: 100%;
+        height: 47px;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     }
 </style>

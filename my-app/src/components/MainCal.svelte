@@ -13,6 +13,18 @@
      * @type {any}
      */
   export let availabilities;
+
+
+  export function clickToAddNewAvailability () {
+    for (var i = 1; i < 96; i++) {
+      for (var j = 2; j < 9; j++) {
+        if(addNewAvailability(i, j)) {
+          return;
+        }
+      }
+    }
+  }
+
   console.log("MainCal selectedBlockID: " + selectedBlockID)
 
 	var dayNames = [["", ""], ["Sun", "28"], ["Mon", "29"], ["Tue", "30"], ["Wed", "31"], ["Thu", "32"], ["Fri", "33"], ["Sat", "34"]];
@@ -47,6 +59,7 @@
         // Note the structure of a time block
         timeBlocks.push({row: i, col: j, day: dayNames[j][0], startMin: i * 15})
         matrixRow.push(0);
+        matrixRow.push(0);
       }
       timeBlocksMatrix.push(matrixRow);
     }
@@ -57,7 +70,7 @@
      * @param {number} row
      * @param {any} col
      */
-  function addNewAvailibity(row, col) {
+  function addNewAvailability(row, col) {
     let isBlockAvailable = 0;
     for (let i = 0; i < 2; i++) {
       isBlockAvailable += timeBlocksMatrix[row+i][col]
@@ -73,7 +86,7 @@
         id: uuidv4(),
         startRow: row,
         startCol: col,
-        day: dayNames[col + 1],
+        day: dayNames[col-1],
         location: "Virtual",
         availability: 1
       }
@@ -89,7 +102,9 @@
       // // availabilities = availabilities
       // console.log("after updating avail")
       // console.log(availabilities)
+      return true;
     }
+    return false;
   }
 
 </script>
@@ -115,12 +130,12 @@
             {#if (block.startMin % 30) == 15}
               <!-- svelte-ignore a11y-click-events-have-key-events -->
               <span 
-              on:click={() => addNewAvailibity(block.row + 1, block.col + 1)} 
+              on:click={() => addNewAvailability(block.row + 1, block.col + 1) } 
               class="day" style="grid-row: {block.row + 1}; grid-column: {block.col + 1}; border-top: 0;"></span>
             {:else}
               <!-- svelte-ignore a11y-click-events-have-key-events -->
               <span 
-              on:click={() => addNewAvailibity(block.row + 1, block.col + 1)} 
+              on:click={() => addNewAvailability(block.row + 1, block.col + 1)} 
               class="day" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};"></span>
             {/if}
           {/if}

@@ -40,7 +40,7 @@
         currentBlock.location = data.location;
         currentBlock.availability = data.availability;
         
-        availabilities = availabilities
+        availabilities = availabilitiesmatrixRow.push(0);
 
         console.log("submitted")
     }
