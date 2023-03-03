@@ -29,6 +29,7 @@
      */
       let blockID;
       let hitRadius = 15;
+      $: cursor = "";
       $: isBottomDraggable = false;
       $: isTopDraggable = false;
       $: prevMouseY = 0;
@@ -71,11 +72,21 @@
     function handleMouseMove(e) {
       let clickY = e.clientY;
       let thisCol = availBlock.startCol;
-      // console.log(clickY);
+      let blockTop = this_avail.offsetTop;
+      let blockBottom = blockTop + this_avail.offsetHeight;
+
+      if((blockTop + hitRadius >= clickY && blockTop <= clickY) ||
+         (blockBottom - hitRadius <= clickY && blockBottom >= clickY)) {
+          cursor="ns-resize";
+         } else {
+            cursor="";
+         }
+        
       if (isTopDraggable) {
         // Extending top of block
         console.log(prevMouseY);
         if (clickY <= prevMouseY - 15 && availBlock.startRow > 0 && isTimeBlockAvailable(availBlock.startRow-1, thisCol)) {
+          cursor="ns-resize";
           selectedBlockID = availBlock.id
           prevMouseY = clickY;
           availBlock.startRow -= 1;
@@ -85,6 +96,7 @@
         }
         // Trimming top of block
         if (clickY >= prevMouseY + 15 && availBlock.len > 1) {
+          cursor="ns-resize";
           selectedBlockID = availBlock.id
           prevMouseY = clickY;
           availBlock.startRow += 1;
@@ -96,6 +108,7 @@
       if (isBottomDraggable) {
         // Extending bottom of block
         if (clickY >= prevMouseY + 15 && isTimeBlockAvailable(availBlock.startRow + availBlock.len, thisCol)) {
+          cursor="ns-resize";
           selectedBlockID = availBlock.id
           prevMouseY = clickY;
           availBlock.len += 1;
@@ -103,12 +116,14 @@
         }
         // Trimming bottom of block
         if (clickY <= prevMouseY - 15 && availBlock.len > 1) {
+          cursor="ns-resize";
           selectedBlockID = availBlock.id
           prevMouseY = clickY;
           availBlock.len -= 1;
           calendarMatrix[availBlock.startRow + availBlock.len][thisCol] = 0;
         }
       }
+
     }
 
     /**
@@ -129,6 +144,7 @@
       selectedBlockID = availBlock.id;
       console.log("In double click function, Selected Block ID: " + selectedBlockID)
     }
+
 
     onMount(async() => {
         // console.log("updating availabilities in availblock: ")
@@ -151,7 +167,8 @@
     class="task {availBlock.className} {availBlock.availability}"
     style="grid-column: {availBlock.startCol};  
     grid-row: {availBlock.startRow} / span {availBlock.len};  
-    align-self: {availBlock.isBottom?'end':'center'};"
+    align-self: {availBlock.isBottom?'end':'center'};
+    cursor: {cursor};"
     >
     <!-- {availBlock.title} -->
 </section>
