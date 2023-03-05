@@ -22,7 +22,7 @@
     // Adding 15 minute time blocks to each day of the week
     function initTimeBlocks() {
         timeBlocks = [];
-        for (var i = 0; i < 96; i++) {
+        for (var i = 0; i < 48; i++) {
             let matrixRow = [];
             for (var j = 0; j < 8; j++) {
             // Note the structure of a time block
@@ -60,9 +60,9 @@
     <div class="calendar-body">
         {#each timeBlocks as block}
           {#if block.col == 0 && (block.startMin % 60) == 0}
-            <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{block.startMin / 60}:00 </span>
+            <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{((block.startMin / 60) + 8) % 12 == 0 ? 12 : ((block.startMin / 60) + 8) % 12}  {((block.startMin / 60) + 8) >= 12 ? "PM" : "AM"}</span>
           {:else if block.col == 0 && (block.startMin % 60) == 30}
-            <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{(block.startMin-30) / 60}:30</span>
+            <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};"></span>
           {:else if block.col == 0 && (block.startMin % 30) == 15}
             <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};"></span>
           {:else}
