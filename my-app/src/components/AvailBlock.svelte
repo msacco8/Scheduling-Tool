@@ -63,7 +63,7 @@
         console.log("top is draggable");
       } else if(blockBottom - hitRadius <= clickY && blockBottom >= clickY) {
         isBottomDraggable = true;
-        prevMouseY = blockBottom - hitRadius;
+        prevMouseY = blockBottom - hitRadius - 10;
         console.log("bottom is draggable");
       }
     }
