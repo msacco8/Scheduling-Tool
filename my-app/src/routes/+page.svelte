@@ -1,4 +1,4 @@
-<script>
+<script>        
     let name = "";
 </script>
 <link href='https://fonts.googleapis.com/css?family=Montserrat:ital,wght@0,100;0,200;0,300;0,600;1,100;1,200;1,700' rel='stylesheet'>
@@ -31,6 +31,7 @@
         justify-content: center;
         vertical-align: bottom;
         position: relative;
+        margin-top: 0px;
     } 
     .center-panel {
         position: absolute;

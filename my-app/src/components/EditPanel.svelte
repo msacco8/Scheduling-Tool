@@ -2,6 +2,7 @@
 // @ts-nocheck
 
     import { beforeUpdate, afterUpdate, onMount } from 'svelte';
+    import GroupCal from './GroupCal.svelte';
     /**
      * @type {string}
      */
@@ -132,7 +133,7 @@
             {"len: " + currentBlock.len}
         </p> -->
     {:else}
-        <h3>Please double click on an existing block or create a new block to edit.</h3>
+        <GroupCal/>
     {/if}
 </div>
 

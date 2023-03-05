@@ -7,7 +7,10 @@
 
     // cell drag select svelte
 
+    export let JsonAvailStore;
     export let availBlock;
+    export let username;
+    export let sTop;
     /**
      * @type {any}
      */
@@ -49,7 +52,7 @@
      */
     function handleExtendOnDrag(e) {
       let clickY = e.clientY;
-      let blockTop = this_avail.offsetTop;
+      let blockTop = this_avail.offsetTop - sTop;
       let blockBottom = blockTop + this_avail.offsetHeight;
     //   console.log(e);
     //   console.log("Click y:", clickY, "Block bottom:", blockBottom);
@@ -70,11 +73,14 @@
      */
     // This handles the drag and extend movement of an AvailBlock
     function handleMouseMove(e) {
+      console.log(sTop);
+      console.log(e);
+
       let clickY = e.clientY;
       let thisCol = availBlock.startCol;
-      let blockTop = this_avail.offsetTop;
+      let blockTop = this_avail.offsetTop - sTop;
       let blockBottom = blockTop + this_avail.offsetHeight;
-
+      
       if((blockTop + hitRadius >= clickY && blockTop <= clickY) ||
          (blockBottom - hitRadius <= clickY && blockBottom >= clickY)) {
           cursor="ns-resize";
@@ -85,7 +91,7 @@
       if (isTopDraggable) {
         // Extending top of block
         console.log(prevMouseY);
-        if (clickY <= prevMouseY - 15 && availBlock.startRow > 0 && isTimeBlockAvailable(availBlock.startRow-1, thisCol)) {
+        if (clickY <= prevMouseY - 15 && availBlock.startRow > 1 && isTimeBlockAvailable(availBlock.startRow-1, thisCol)) {
           cursor="ns-resize";
           selectedBlockID = availBlock.id
           prevMouseY = clickY;
@@ -123,13 +129,14 @@
           calendarMatrix[availBlock.startRow + availBlock.len][thisCol] = 0;
         }
       }
-
+      updateLocalStorageAvailabilities()
     }
 
     /**
      * @param {any} e
      */
     function handleMouseLeave(e) {
+      console.log(e.target.scrollTop)
       prevMouseY = this_avail.offsetTop - (this_avail.offsetHeight / 2)
       isBottomDraggable = false;
       isTopDraggable = false;
@@ -147,16 +154,17 @@
 
 
     onMount(async() => {
-        // console.log("updating availabilities in availblock: ")
-        // console.log(availabilities)
-        // console.log("Mounting : " + availBlock.startCol)
         selectedBlockID = availBlock.id
     })
 
-
+    function updateLocalStorageAvailabilities() {
+      JsonAvailStore[username] = availabilities;
+      JsonAvailStore = JsonAvailStore;
+      localStorage.setItem("availabilitiesStore", JSON.stringify(JsonAvailStore));
+    }
 </script>
 
-<section
+<div
     on:mousedown={handleExtendOnDrag}
     on:mousemove={handleMouseMove}
     on:mouseleave={handleMouseLeave}
@@ -171,7 +179,7 @@
     cursor: {cursor};"
     >
     <!-- {availBlock.title} -->
-</section>
+</div>
 
 <style>
 .ifneeded {

@@ -14,6 +14,16 @@
      */
   export let availabilities;
 
+  /**
+     * @type {{ [x: string]: any; }}
+     */
+   export let JsonAvailStore;
+
+  /**
+     * @type {string | number}
+     */
+   export let username;
+
 
   export function clickToAddNewAvailability () {
     for (var i = 1; i < 96; i++) {
@@ -33,14 +43,13 @@
      */
 	var timeBlocks = [];
   /**
+     * @type {any}
+     */
+  let sTop = 0;
+  /**
      * @type {number[][]}
      */
   var timeBlocksMatrix = []
-	
- /**
-     * @type {any[]}
-     */
-  // $: availabilities = currentBlocks;
 
 	$: initContent();
   
@@ -49,7 +58,7 @@
     initTimeBlocks();
 	}
 
-  // Adding 30 minute time blocks to each day of the week
+  // Adding 15 minute time blocks to each day of the week
   function initTimeBlocks() {
     timeBlocks = [];
 
@@ -92,6 +101,8 @@
       }
       console.log(blockToAdd)
       availabilities.push(blockToAdd);
+      updateLocalStorageAvailabilities();
+      
 
       // Assigning spot in matrix as used by this availBlock 
       for (let i = 0; i < availabilities[availabilities.length-1].len; i++) {
@@ -107,6 +118,12 @@
     return false;
   }
 
+  function updateLocalStorageAvailabilities() {
+    JsonAvailStore[username] = availabilities;
+    JsonAvailStore = JsonAvailStore;
+    localStorage.setItem("availabilitiesStore", JSON.stringify(JsonAvailStore));
+  }
+
 </script>
 
 
@@ -118,7 +135,7 @@
       {/each}
     </div>
 
-    <div class="calendar-body">
+    <div class="calendar-body" on:scroll={(e)=>sTop=e.target.scrollTop}>
         {#each timeBlocks as block}
           {#if block.col == 0 && (block.startMin % 60) == 0}
             <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{block.startMin / 60}:00 EST</span>
@@ -148,6 +165,9 @@
             bind:availBlock={availBlock}
             bind:selectedBlockID={selectedBlockID}
             calendarMatrix={timeBlocksMatrix}
+            bind:JsonAvailStore={JsonAvailStore}
+            bind:username={username}
+            bind:sTop={sTop}
           />
         {/each}
     </div>
@@ -156,10 +176,6 @@
 
 <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 <style>
-.test {
-  position: relative;
-  z-index: 2;
-}
 .calendar-container {
   width: 100%;
   margin: auto;

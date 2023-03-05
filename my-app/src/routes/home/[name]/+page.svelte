@@ -12,10 +12,16 @@
       export let data;
 
       let selectedBlockID = '';
+      let JsonAvailStore = JSON.parse("{}");
+      if (localStorage.getItem("availabilitiesStore") != "") {
+            JsonAvailStore = JSON.parse(localStorage.getItem("availabilitiesStore") || "{}")
+      }
+
       /**
      * @type {any[]}
      */
-      let availabilities = [];
+      let newEmptyAvailability = JsonAvailStore[data.username] ? JsonAvailStore[data.username] : [];
+      let availabilities = JSON.stringify(JsonAvailStore) != "{}" ? newEmptyAvailability : [];
       afterUpdate(() => {
             console.log("main page avails is: ")
             console.log(availabilities)
@@ -36,6 +42,8 @@
                   bind:selectedBlockID={selectedBlockID}
                   bind:availabilities={availabilities}
                   bind:this={mainCal}
+                  bind:JsonAvailStore={JsonAvailStore}
+                  bind:username={data.username}
             />
       </div>
       <RightPanel 
@@ -48,7 +56,7 @@
 
 <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 <style>
- body{
+body{
       font-family: 'Montserrat';
       background-color: #F9FAFC; 
       display: flex;
@@ -57,6 +65,7 @@
       width: 100vw;
       height: 100vh;
       overflow: hidden;
+      margin: 0px;
  }   
  .subheader{
       display: flex;

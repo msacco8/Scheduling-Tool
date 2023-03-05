@@ -38,18 +38,25 @@
 
 <style>
     .right-panel {
+        position: absolute;
+        top: 0;
+        right: 0;
         background-color: white;
-        width: 25%;
+        width: 26%;
         padding: 20px;
+        height: 100%;
+        min-height: 100%;
+        margin: 0;
+
     }
     .right-panel-container {
-        margin-bottom: 20px;
+        margin-bottom: 30px;
         padding: 5px;
         box-shadow: 0px 0px 0px 1px #E4E4E4;
         border-radius: 8px;
     }
     .editing {
-        height: 50%;
+        height: 350px;
     }
     .button{
         width: 100%;
