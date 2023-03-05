@@ -41,6 +41,8 @@
         currentBlock.location = data.location;
         currentBlock.availability = data.availability;
 
+        selectedBlockID = '';
+
         console.log("submitted")
     }
      // @ts-ignore
@@ -57,7 +59,7 @@
         // need to get a string like "hh:mm" from start row
         let minutes = (parseInt(row) * 15) - 15; //some integer
         let m = minutes % 60;
-        let h = (minutes-m)/60;
+        let h = 8 + (minutes-m)/60;
         let HHMM = (h < 10 ? "0" : "") + h.toString() + ":" + (m < 10 ? "0" : "") + m.toString();
         console.log(HHMM)
         return HHMM
@@ -91,8 +93,8 @@
                 type="time"
                 id="start"
                 name="start"
-                min="00:00"
-                max="24:00"
+                min="08:00"
+                max="20:00"
                 step="900"
                 value={currentStart}
                 required
@@ -103,8 +105,8 @@
                 type="time"
                 id="end"
                 name="end"
-                min="00:00"
-                max="24:00"
+                min="08:00"
+                max="20:00"
                 step="900"
                 value={currentEnd}
                 required>
