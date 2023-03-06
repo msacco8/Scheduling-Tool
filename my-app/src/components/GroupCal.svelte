@@ -60,7 +60,7 @@
     <div class="calendar-body">
         {#each timeBlocks as block}
           {#if block.col == 0 && (block.startMin % 60) == 0}
-            <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{((block.startMin / 60) + 8) % 12 == 0 ? 12 : ((block.startMin / 60) + 8) % 12}  {((block.startMin / 60) + 8) >= 12 ? "PM" : "AM"}</span>
+            <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{((block.startMin / 60) + 8) % 12 == 0 ? 12 : ((block.startMin / 60) + 8) % 12}{((block.startMin / 60) + 8) >= 12 ? "PM" : "AM"}</span>
           {:else if block.col == 0 && (block.startMin % 60) == 30}
             <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};"></span>
           {:else if block.col == 0 && (block.startMin % 30) == 15}
@@ -88,11 +88,12 @@
     border-radius: 10px;
     background: rgba(0, 0, 0, 0);
     user-select: none;
+    margin-left: 5px;
     }
     .calendar {
     display: grid;
     width: 100%;
-    grid-template-columns: repeat(8, minmax(35px, 1fr));
+    grid-template-columns: repeat(8, 40px);
     grid-template-rows: 50px;
     grid-auto-rows: 50px;
     overflow: auto;
@@ -123,12 +124,9 @@
     border-top: 1px solid #DCDCDC;
     border-right: 1px solid #DCDCDC;
     text-align: right;
-    padding: 0px 20px;
-    letter-spacing: 1px;
-    font-size: 14px;
+    font-size: 12px;
     box-sizing: border-box;
     color: #98a0a6;
-    position: relative;
     z-index: 1;
     }
     .day:nth-of-type(8n + 8) {

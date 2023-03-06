@@ -82,10 +82,11 @@
         
      }
 </script>
+<link href='https://fonts.googleapis.com/css?family=Montserrat:ital,wght@0,100;0,200;0,300;0,600;1,100;1,200;1,700' rel='stylesheet'>
 
 <div class='edit-container'>
     {#if selectedBlockID != ""}
-        <h2 style="text-align: center">{currentBlock.day[0]} February {currentBlock.day[1]}</h2>
+        <p style="font-weight: 600;">{currentBlock.day[0]} February {currentBlock.day[1]} Availability</p>
         <form on:submit|preventDefault={handleSubmit}>
             <label for="start">Choose a start time for this block:</label>
             <input
@@ -122,7 +123,7 @@
                 <option value="preferred">Preferred</option>
                 <option value="ifneeded">If Needed</option>
             </select>
-            <input class="button submit-button" type="submit" value="Submit">
+            <input class="button" type="submit" value="Save">
           </form>
         <!-- <p>
             {"start row: " + currentBlock.startRow}
@@ -143,22 +144,19 @@
 form {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
 }
 
 .inp {
     margin: 2px;
+    margin-bottom: 20px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 0px 1px #E4E4E4;
+    border-radius: 8px;
+    border:1px solid transparent;
 }
 
 .time-input {
-    width: 100%
-}
-
-.submit-button {
-    margin: 5px;
-    width: 50%;
-    height: 3vh;
-
+    width: 100%;
 }
 .location-input {
     width: 100%;
@@ -171,6 +169,24 @@ form {
 }
 .edit-container {
     height: 100%;
+}
+
+.button{
+        width: 40%;
+        border:1px solid transparent;
+        color: white;
+        font-size: 16px;
+
+        background: #5272E9;
+        border-radius: 5px;
+    }
+.button:hover {
+      box-shadow: 0 5px 10px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.1);
+}
+
+.button:active {
+      width: 40%;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 </style>

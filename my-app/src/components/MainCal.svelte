@@ -178,7 +178,7 @@
 <style>
 .calendar-container {
   width: 100%;
-  margin: auto;
+  margin-top: 70px;
   overflow: hidden;
   border-radius: 10px;
   background: rgba(0, 0, 0, 0);
@@ -188,17 +188,17 @@
 .calendar {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(8, minmax(120px, 1fr));
+  grid-template-columns: repeat(8, minmax(122px, 1fr));
   grid-template-rows: 50px;
   grid-auto-rows: 50px;
   overflow: auto;
-  
+  margin-bottom: 25px;
 }
 .calendar-body {
   display: grid;
   width: 100%;
   height: 500px;
-  grid-template-columns: repeat(8, minmax(120px, 1fr));
+  grid-template-columns: repeat(8, minmax(122px, 1fr));
   grid-template-rows: 25px;
   grid-auto-rows: 25px;
   overflow-y: scroll;
@@ -231,7 +231,7 @@
 .time {
   border-top: 1px solid #DCDCDC;
   border-right: 1px solid #DCDCDC;
-  text-align: right;
+  text-align: left;
   padding: 0px 20px;
   letter-spacing: 1px;
   font-size: 14px;

@@ -22,6 +22,7 @@
 
 <div class="right-panel">
     <div class="right-panel-container">
+        <img src="/pfp1.png" alt="Profile" style="width:70px;height:70px;">
         <p>{username}</p>
     </div>
     <div class="right-panel-container editing">
@@ -54,9 +55,12 @@
         padding: 5px;
         box-shadow: 0px 0px 0px 1px #E4E4E4;
         border-radius: 8px;
+        display: flex;
+        flex-wrap: wrap;  
+        align-items: center;
     }
     .editing {
-        height: 350px;
+        height: 340px;
     }
     .button{
         width: 100%;

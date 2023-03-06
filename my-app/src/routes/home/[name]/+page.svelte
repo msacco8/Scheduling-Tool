@@ -31,9 +31,11 @@
      */
       let mainCal;
 </script>
+<link href='https://fonts.googleapis.com/css?family=Montserrat:ital,wght@0,100;0,200;0,300;0,600;1,100;1,200;1,700' rel='stylesheet'>
+
 <body>
       <div class="leftpanel">
-            <h1>Scheduling a Meeting</h1>
+            <h1 style="font-weight: 600;margin-left: 18px;">Scheduling a Meeting</h1>
             <div class="subheader">
                   <p>February 28-34, 2023</p>
                   <button on:click={() => mainCal.clickToAddNewAvailability()} class="button">+ Add New Availablity</button>
@@ -54,7 +56,6 @@
 </body>
 
 
-<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 <style>
 body{
       font-family: 'Montserrat';
@@ -70,11 +71,13 @@ body{
  .subheader{
       display: flex;
       justify-content: space-between;
-      flex-wrap: wrap;   
-      margin-bottom: 50px;  
+      flex-wrap: wrap;    
+      font-weight: 600;
+      margin-left: 18px;
  }
  .leftpanel{
       justify-content: space-between;
+      width: 70%;
  }
  .button{
         width: 20%;
