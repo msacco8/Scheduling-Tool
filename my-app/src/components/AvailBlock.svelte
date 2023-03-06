@@ -73,8 +73,8 @@
      */
     // This handles the drag and extend movement of an AvailBlock
     function handleMouseMove(e) {
-      console.log(sTop);
-      console.log(e);
+      // console.log(sTop);
+      // console.log(e);
 
       let clickY = e.clientY;
       let thisCol = availBlock.startCol;
@@ -90,7 +90,7 @@
         
       if (isTopDraggable) {
         // Extending top of block
-        console.log(prevMouseY);
+        // console.log(prevMouseY);
         if (clickY <= prevMouseY - 15 && availBlock.startRow > 1 && isTimeBlockAvailable(availBlock.startRow-1, thisCol)) {
           cursor="ns-resize";
           selectedBlockID = availBlock.id
