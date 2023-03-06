@@ -39,6 +39,12 @@
             for (let index in groupAvailabilities[person]) {
                 let jsonBlock = groupAvailabilities[person][index];
                 for (let i = 0; i < jsonBlock.len; i++) {
+                    console.log("START")
+                    console.log(jsonBlock.startRow + i);
+                    console.log(jsonBlock.startCol);
+                    console.log(timeCountsMatrix.length)
+                    console.log(timeCountsMatrix)
+                    console.log("STOP")
                     timeCountsMatrix[jsonBlock.startRow + i][jsonBlock.startCol] += 1;
                 }
             }
