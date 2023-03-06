@@ -108,7 +108,7 @@
     <div class="center-panel">
         <div class="panel-body">
             <div>
-                <h1 style="margin-top:40px; font-weight: 600px;">Thank you!</h1>
+                <h1 style="margin-top:20px; font-weight: 600px;">Thank you!</h1>
             </div>
             
             <div>
@@ -117,9 +117,10 @@
             <div class="groupcal-container">
                 <GroupCal/>
             </div>
-             <div>
+             <div style="margin-bottom:10px;">
                 Any 30 minute meeting within the following time interval <br>will work for most people in the group: <br><b>{meetingTime}</b>
-             </div>
+             </div >
+             <a href="/"><buton>Return to Landing Page</buton></a>
         </div>
     </div>
 </body>

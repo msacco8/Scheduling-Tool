@@ -153,15 +153,16 @@
      */
   function handleMouseMove(e) {
     let clickY = e.clientY;
-    let availBlock = availabilities[availabilities.length - 1];
-    let thisCol = availBlock.startCol;
     if (dragging) {
+      let availBlock = availabilities[availabilities.length - 1];
+      let thisCol = availBlock.startCol;
       // Extending bottom of block
       if (clickY >= prevMouseY + 15 && isTimeBlockAvailable(availBlock.startRow + availBlock.len, thisCol)) {
         selectedBlockID = availBlock.id
         prevMouseY = clickY;
         availBlock.len += 1;
         timeBlocksMatrix[availBlock.startRow + availBlock.len-1][thisCol] = 1;
+        timeBlocksMatrix = timeBlocksMatrix;
       }
       // Trimming bottom of block
       if (clickY <= prevMouseY - 15 && availBlock.len > 1) {
@@ -169,6 +170,7 @@
         prevMouseY = clickY;
         availBlock.len -= 1;
         timeBlocksMatrix[availBlock.startRow + availBlock.len][thisCol] = 0;
+        timeBlocksMatrix = timeBlocksMatrix;
       }
     }
     availabilities = availabilities;
