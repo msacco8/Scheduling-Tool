@@ -77,6 +77,10 @@
 
         minutes += 15 * (maxOfEachDay[day][maxOfEachDay[day].length-1] - maxOfEachDay[day][0] +1)
 
+        if ((maxOfEachDay[day][maxOfEachDay[day].length-1] - maxOfEachDay[day][0] +1) < 2) {
+            return "No Available Time";
+        }
+
         if (minutes < (12 * 4 * 15)) {
             endMeridian = "AM";
         } else {

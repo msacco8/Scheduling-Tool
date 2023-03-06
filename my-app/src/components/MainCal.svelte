@@ -118,6 +118,66 @@
     return false;
   }
 
+  /**
+     * @param { number} row
+     * @param { number} col
+     */
+  function isTimeBlockAvailable(row, col) {
+        if (timeBlocksMatrix[row][col] == 0) {
+          return true;
+        }
+        return false
+      }
+
+  let dragging = false;
+  let prevMouseY = 0;
+  /**
+     * @param {any} e
+     */
+  function handleExtendOnDrag(e) {
+    let style = e.target.attributes.style.value;
+    style = style.toString().split(": ");
+    style = style[1].split(" / ");
+    let row = parseInt(style[0].trim());
+    let col = parseInt(style[1].trim());
+
+    if (col != 1) {
+      addNewAvailability(row, col);
+      dragging = true;
+      prevMouseY = e.clientY;
+    }
+  }
+
+    /**
+     * @param {any} e
+     */
+  function handleMouseMove(e) {
+    let clickY = e.clientY;
+    let availBlock = availabilities[availabilities.length - 1];
+    let thisCol = availBlock.startCol;
+    if (dragging) {
+      // Extending bottom of block
+      if (clickY >= prevMouseY + 15 && isTimeBlockAvailable(availBlock.startRow + availBlock.len, thisCol)) {
+        selectedBlockID = availBlock.id
+        prevMouseY = clickY;
+        availBlock.len += 1;
+        timeBlocksMatrix[availBlock.startRow + availBlock.len-1][thisCol] = 1;
+      }
+      // Trimming bottom of block
+      if (clickY <= prevMouseY - 15 && availBlock.len > 1) {
+        selectedBlockID = availBlock.id
+        prevMouseY = clickY;
+        availBlock.len -= 1;
+        timeBlocksMatrix[availBlock.startRow + availBlock.len][thisCol] = 0;
+      }
+    }
+    availabilities = availabilities;
+  }
+
+  function handleMouseLeave() {
+    dragging = false;
+  }
+
   function updateLocalStorageAvailabilities() {
     JsonAvailStore[username] = availabilities;
     JsonAvailStore = JsonAvailStore;
@@ -135,7 +195,12 @@
       {/each}
     </div>
 
-    <div class="calendar-body" on:scroll={(e)=>sTop=e.target.scrollTop}>
+    <div class="calendar-body" 
+    on:mousedown={handleExtendOnDrag} 
+    on:mousemove={handleMouseMove}
+    on:mouseleave={handleMouseLeave}
+    on:mouseup={handleMouseLeave}
+    on:scroll={(e)=>sTop=e.target.scrollTop}>
         {#each timeBlocks as block}
           {#if block.col == 0 && (block.startMin % 60) == 0}
             <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{((block.startMin / 60) + 8) % 12 == 0 ? 12 : ((block.startMin / 60) + 8) % 12}:00  {((block.startMin / 60) + 8) >= 12 ? "PM" : "AM"}</span>
