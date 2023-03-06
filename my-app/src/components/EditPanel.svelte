@@ -12,8 +12,6 @@
      */
     export let availabilities;
 
-    // let currentBlock = availabilities.find(el => el.id === selectedBlockID)
-    let currentBlockIndex;
     /**
      * @type {any}
      */
@@ -42,10 +40,8 @@
         currentBlock.location = data.location;
         currentBlock.availability = data.availability;
 
-        console.log(currentBlock.startRow)
-        console.log(currentBlock.len)
-
         selectedBlockID = '';
+        availabilities = availabilities;
 
         console.log("submitted")
     }
@@ -78,9 +74,8 @@
         mEnd = parseInt(mEnd);
         // console.log("start hours" + hStart);
         // console.log("start minutes" + mStart);
-        let startBlocks = (hStart * 4) + Math.floor(mStart / 15) - 32
-        print("start blocks: " + startBlocks)
-        let endBlocks = (hEnd * 4) + Math.floor(mEnd / 15) - 32
+        let startBlocks = (hStart * 4) + Math.floor(mStart / 15) - 32;
+        let endBlocks = (hEnd * 4) + Math.floor(mEnd / 15) - 32;
         console.log(startBlocks) 
         console.log(endBlocks)
         return [startBlocks, endBlocks - startBlocks]
