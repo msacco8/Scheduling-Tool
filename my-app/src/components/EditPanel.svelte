@@ -79,7 +79,13 @@
         console.log(startBlocks) 
         console.log(endBlocks)
         return [startBlocks, endBlocks - startBlocks]
-        
+     }
+
+     function handleDelete() {
+        console.log(currentBlock.id)
+        availabilities = availabilities.filter(el => el.id != currentBlock.id)
+        selectedBlockID = ''
+
      }
 </script>
 <link href='https://fonts.googleapis.com/css?family=Montserrat:ital,wght@0,100;0,200;0,300;0,600;1,100;1,200;1,700' rel='stylesheet'>
@@ -106,7 +112,7 @@
                 type="time"
                 id="end"
                 name="end"
-                min="08:00"
+                min={currentStart}
                 max="20:00"
                 step="900"
                 value={currentEnd}
@@ -120,10 +126,11 @@
             <label for="availability-select">Choose an availability:</label>
             <select class="inp availability-input" name="availability" id="availability-select">
                 <option value="">--Please choose an option--</option>
-                <option value="preferred">Preferred</option>
-                <option value="ifneeded">If Needed</option>
+                <option value="preferred" selected={currentBlock.availability === 1 ? "selected" : '' }>Preferred</option>
+                <option value="ifneeded" selected={currentBlock.availability === "ifneeded" ? "selected" : '' }>If Needed</option>
             </select>
             <input class="button" type="submit" value="Save">
+            <button type="button" class="button" on:click={handleDelete}>Delete</button>
           </form>
         <!-- <p>
             {"start row: " + currentBlock.startRow}

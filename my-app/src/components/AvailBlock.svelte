@@ -32,6 +32,7 @@
      */
       let blockID;
       let hitRadius = 15;
+      $: className = availBlock.availability;
       $: cursor = "";
       $: isBottomDraggable = false;
       $: isTopDraggable = false;
@@ -172,7 +173,7 @@
     on:dblclick={handleDoubleClick}
     bind:this={this_avail}
     id={availBlock.id}
-    class="task {availBlock.className} {availBlock.availability}"
+    class="task {availBlock.className} {className}"
     style="grid-column: {availBlock.startCol};  
     grid-row: {availBlock.startRow} / span {availBlock.len};  
     align-self: {availBlock.isBottom?'end':'center'};
