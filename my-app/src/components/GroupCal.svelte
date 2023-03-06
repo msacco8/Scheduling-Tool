@@ -5,7 +5,7 @@
      * @type {any[]}
      */
 	var timeBlocks = [];
-    var JsonAvailStore = JSON.parse(localStorage.getItem("availabilitiesStore") || "{}")
+    var JsonAvailStore = JSON.parse(localStorage.getItem("availabilitiesStore") || "{}");
     var groupAvailabilities = JSON.stringify(JsonAvailStore) != "{}" ? JsonAvailStore : {};
     /**
      * @type {number[][]}

@@ -15,6 +15,11 @@
 
     export let username;
 
+    let JsonAvailStore = JSON.parse("{}");
+    if (localStorage.getItem("availabilitiesStore") != "") {
+        JsonAvailStore = JSON.parse(localStorage.getItem("availabilitiesStore") || "{}")
+    }
+
     /**
      * @type {any}
      */
@@ -140,7 +145,7 @@
                 <option value="ifneeded" selected={currentBlock.availability === "ifneeded" ? "selected" : '' }>If Needed</option>
             </select>
             <input class="button" type="submit" value="Save">
-            <button type="button" class="button" on:click={handleDelete}>Delete</button>
+            <button style="margin-left: 65px;" type="button" class="button" on:click={handleDelete}>Delete</button>
           </form>
         <!-- <p>
             {"start row: " + currentBlock.startRow}

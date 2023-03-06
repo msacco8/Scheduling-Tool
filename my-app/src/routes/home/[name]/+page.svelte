@@ -1,12 +1,13 @@
 <script>
 // @ts-nocheck
 
-    import { afterUpdate } from 'svelte'
+    import { afterUpdate, onMount} from 'svelte'
 
       // @ts-ignore
       import MainCal from '/src/components/MainCal.svelte'
       // @ts-ignore
       import RightPanel from '/src/components/RightPanel.svelte'
+      import {availabilitiesStore} from "./localstorage.js"
 
       export let timeBlocksMatrix
 
