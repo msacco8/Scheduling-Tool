@@ -57,6 +57,7 @@
       <RightPanel 
       username={data.username}
       bind:timeBlocksMatrix={timeBlocksMatrix}
+      bind:JsonAvailStore={JsonAvailStore}
       bind:selectedBlockID={selectedBlockID}
       bind:availabilities={availabilities}
       />

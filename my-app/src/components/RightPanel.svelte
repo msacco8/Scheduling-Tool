@@ -4,9 +4,16 @@
     import ToolTips from './ToolTips.svelte';
     import EditPanel from './EditPanel.svelte';
     import { afterUpdate } from 'svelte';
+    import { onMount } from 'svelte';
+
+    // var fs = require('fs');
+    let newLine = '\r\n';
+    let fields = ['User', 'Time (ms)'];
+
     
     // @ts-ignore
     export let username;
+    export let JsonAvailStore;
     /**
      * @type {string}
      */
@@ -16,11 +23,28 @@
      * @type {any}
      */
       export let availabilities;
+
+      let startTime;
+      let endTime;
     afterUpdate(() => {
         console.log("RightPanel selectedBlock: " + selectedBlockID)
         console.log("avails in rightpanel is: ")
         console.log(availabilities)
-    })
+    });
+
+    onMount(() => {
+        startTime = new Date().getTime();
+    });
+
+    function handleSubmitAvail() {
+        endTime = new Date().getTime();
+        let timePassed = endTime - startTime;
+        // JsonAvailStore[username] = [availabilities, timePassed];
+        // JsonAvailStore
+        // JsonAvailStore['enterTime'] += [{username : username, time: timePassed}]
+        // JsonAvailStore = JsonAvailStore;
+        // localStorage.setItem("availabilitiesStore", JSON.stringify(JsonAvailStore));
+    }
     
 </script>
 
@@ -40,7 +64,7 @@
     <div class="right-panel-container">
         <ToolTips/>
     </div>
-    <a href="/recommendation"><button class="button">Submit Availablity</button></a>
+    <a href="/recommendation"><button on:click={handleSubmitAvail} class="button">Submit Availablity</button></a>
 </div>
 
 <style>

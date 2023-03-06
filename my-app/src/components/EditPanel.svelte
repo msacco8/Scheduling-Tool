@@ -15,6 +15,8 @@
 
     export let username;
 
+    let dayNames = [[["Sun", "28"], 2], [["Mon", "29"], 3], [["Tue", "30"], 4], [["Wed", "31"], 5], [["Thu", "32"], 6], [["Fri", "33"], 7], [["Sat", "34"], 8]];
+
     let JsonAvailStore = JSON.parse("{}");
     if (localStorage.getItem("availabilitiesStore") != "") {
         JsonAvailStore = JSON.parse(localStorage.getItem("availabilitiesStore") || "{}")
@@ -40,12 +42,26 @@
         }
         console.log(data)
 
+        let newDays = data.day.split(',')
+        console.log(newDays)
+
+        for (let i = 0; i < currentBlock.len; i++) {
+            timeBlocksMatrix[currentBlock.startRow+i][currentBlock.startCol] = 0;
+        }
+
         // update fields of selected block
         let newTimes = getLength(data.start, data.end)
         currentBlock.startRow = newTimes[0] + 1
         currentBlock.len = newTimes[1]
         currentBlock.location = data.location;
         currentBlock.availability = data.availability;
+        currentBlock.day = newDays.slice(0,2);
+        currentBlock.startCol = newDays[2];
+        console.log(data.day)
+
+        for (let i = 0; i < currentBlock.len; i++) {
+            timeBlocksMatrix[currentBlock.startRow+i][currentBlock.startCol] = 1;
+        }
 
         selectedBlockID = '';
         availabilities = availabilities;
@@ -111,9 +127,19 @@
 
 <div class='edit-container'>
     {#if selectedBlockID != ""}
-        <p style="font-weight: 600;">{currentBlock.day[0]} February {currentBlock.day[1]} Availability</p>
+        <p style="font-weight: 600; margin-bottom: 10px">{currentBlock.day[0]} February {currentBlock.day[1]} Availability</p>
         <form on:submit|preventDefault={handleSubmit}>
-            <label for="start">Choose a start time for this block:</label>
+            <label class="inp-label" for="day-select">Choose a day for this block:</label>
+            <select class="inp day-input" name="day" id="day-select">
+                {#each dayNames as day}
+                    {#if currentBlock.day[0] === day[0][0]}
+                        <option value={day} selected>{day[0][0] + ', ' + day[0][1]}</option>
+                    {:else}
+                        <option value={day}>{day[0][0] + ', ' + day[0][1]}</option>
+                    {/if}
+                {/each}
+            </select>
+            <label class="inp-label" for="start">Choose a start time for this block:</label>
             <input
                 class="inp time-input"
                 type="time"
@@ -125,7 +151,7 @@
                 value={currentStart}
                 required
             >
-            <label for="end">Choose an end time for this block:</label>
+            <label class="inp-label" for="end">Choose an end time for this block:</label>
             <input
                 class="inp time-input"
                 type="time"
@@ -136,9 +162,9 @@
                 step="900"
                 value={currentEnd}
                 required>
-            <label for="location-text">Choose a location:</label>
+            <label class="inp-label" for="location-text">Choose a location:</label>
             <input type="text" class="inp location-input" name="location" id="location-text" value={currentBlock.location}>
-            <label for="availability-select">Choose an availability:</label>
+            <label class="inp-label" for="availability-select">Choose an availability:</label>
             <select class="inp availability-input" name="availability" id="availability-select">
                 <!-- <option value="">--Please choose an option--</option> -->
                 <option value="preferred" selected={currentBlock.availability === 1 ? "selected" : '' }>Preferred</option>
@@ -163,6 +189,10 @@
 
 <style>
 
+.inp-label {
+    
+}
+
 form {
     display: flex;
     flex-wrap: wrap;
@@ -170,7 +200,7 @@ form {
 
 .inp {
     margin: 2px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     background: #FFFFFF;
     box-shadow: 0px 0px 0px 1px #E4E4E4;
     border-radius: 8px;
@@ -180,9 +210,14 @@ form {
 .time-input {
     width: 100%;
 }
+
+.day-input {
+    width: 100%;
+    height: 3vh;
+}
 .location-input {
     width: 100%;
-    height: 3vh
+    height: 2.5vh
 }
 
 .availability-input {
