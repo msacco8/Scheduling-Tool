@@ -49,7 +49,7 @@
         top: 0;
         right: 0;
         background-color: white;
-        width: 26%;
+        width: 24%;
         padding: 20px;
         height: 100%;
         min-height: 100%;

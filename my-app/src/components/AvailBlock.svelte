@@ -131,6 +131,7 @@
         }
       }
       updateLocalStorageAvailabilities()
+      timeFrame = getTimeFrame()
     }
 
     /**
@@ -153,6 +154,35 @@
       console.log("In double click function, Selected Block ID: " + selectedBlockID)
     }
 
+    function getTimeFrame() {
+      let minutes = (availBlock.startRow - 1 + 32) * 15;
+      let start = ""
+      let end = ""
+      if (minutes % 60 == 0) {
+        start=(minutes / 60) % 12 == 0 ? "12:00" : (minutes / 60) % 12 + ":00";
+      } else if (minutes % 60 == 30) {
+        start=((minutes-30) / 60) % 12 == 0 ? "12:30" : ((minutes-30) / 60) % 12 + ":30";
+      } else if (minutes % 60 == 45) {
+        start=((minutes-45) / 60) % 12 == 0 ? "12:45" : ((minutes-45) / 60) % 12 + ":45";
+      } else {
+        start=((minutes-15) / 60) % 12 == 0 ? "12:15" : ((minutes-15) / 60) % 12 + ":15";
+      }
+
+      minutes += 15 * availBlock.len
+      if (minutes % 60 == 0) {
+        end=(minutes / 60) % 12 == 0 ? "12:00" : (minutes / 60) % 12 + ":00";
+      } else if (minutes % 60 == 30) {
+        end=((minutes-30) / 60) % 12 == 0 ? "12:30" : ((minutes-30) / 60) % 12 + ":30";
+      } else if (minutes % 60 == 45) {
+        end=((minutes-45) / 60) % 12 == 0 ? "12:45" : ((minutes-45) / 60) % 12 + ":45";
+      } else {
+        end=((minutes-15) / 60) % 12 == 0 ? "12:15" : ((minutes-15) / 60) % 12 + ":15";
+      }
+      return start + " - " + end;
+    }
+
+    $: timeFrame = getTimeFrame()
+
 
     onMount(async() => {
         selectedBlockID = availBlock.id
@@ -163,6 +193,7 @@
       JsonAvailStore = JsonAvailStore;
       localStorage.setItem("availabilitiesStore", JSON.stringify(JsonAvailStore));
     }
+
 </script>
 
 <div
@@ -173,98 +204,56 @@
     on:dblclick={handleDoubleClick}
     bind:this={this_avail}
     id={availBlock.id}
-    class="task {availBlock.className} {className}"
+    class="task {availBlock.availability}"
     style="grid-column: {availBlock.startCol};  
     grid-row: {availBlock.startRow} / span {availBlock.len};  
     align-self: {availBlock.isBottom?'end':'center'};
     cursor: {cursor};"
     >
+    <div class="inner-block-{availBlock.availability}">
+      <div style="font-size: 13px">
+        {availBlock.availability == "noavailability" ? "Scheduling Time" : (availBlock.availability == "preferred" ? "Available" : "If Need Be")}
+      </div>
+      <div style="font-size: 11px">
+        {availBlock.location}
+      </div>
+      <div style="position: absolute; bottom:0; font-size: 13px">
+        {timeFrame}
+      </div>
+    </div>
     <!-- {availBlock.title} -->
 </div>
 
 <style>
+.inner-block-ifneeded{
+  padding: 3px;
+  width: 90%;
+  background-color: #FFFAE9;
+  border-radius: 0px 7px 7px 0px;
+  color: #E9C852;
+}
+.inner-block-preferred {
+  padding: 3px;
+  width: 90%;
+  background-color: #E6FEFF;
+  border-radius: 0px 7px 7px 0px;
+  color: #24B0C9;
+}
 .ifneeded {
-    background: orange !important;
+  background: #E9C852;
+}
+.preferred {
+  background: #24B0C9;
 }
 .task {
-  border-left-width: 3px;
   margin-right: 10px;
-  border-left-style: solid;
   font-size: 14px;
   position: relative;
   align-self: center;
   z-index:2;
-  border-radius: 15px;
+  border-radius: 7px;
   height: 100%;
-}
-.task--warning {
-  border-left-color: #fdb44d;
-  background: #fef0db;
-  color: #fc9b10;
-  margin-top: -5px;
-}
-.task--danger {
-  border-left-color: #fa607e;
-  grid-column: 2 / span 3;
-  grid-row: 3;
-  margin-top: 15px;
-  background: rgba(253, 197, 208, 0.7);
-  color: #f8254e;
-}
-.task--info {
-  border-left-color: #4786ff;
-  margin-top: 15px;
-  background: rgba(218, 231, 255, 0.7);
-  color: #0a5eff;
-}
-.task--primary {
-  background: #4786ff;
-  border: 0;
-  border-radius: 10px;
-  color: #f00;
-}
-.task-detail {
-  position: absolute;
-  left: 0;
-  top: calc(100% + 8px);
-  background: #efe;
-  border: 1px solid rgba(166, 168, 179, 0.2);
-  color: #100;
-  padding: 20px;
-  box-sizing: border-box;
-  border-radius: 14px;
-  z-index: 2;
-}
-.task-detail:after, .task-detail:before {
-  bottom: 100%;
-  left: 30%;
-  border: solid transparent;
-  content: " ";
-  height: 100%;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-}
-.task-detail:before {
-  border-bottom-color: rgba(166, 168, 179, 0.2);
-  border-width: 8px;
-  margin-left: -8px;
-}
-.task-detail:after {
-  border-bottom-color: #fff;
-  border-width: 6px;
-  margin-left: -6px;
-}
-.task-detail h2 {
-  font-size: 15px;
-  margin: 0;
-  color: #91565d;
-}
-.task-detail p {
-  margin-top: 4px;
-  font-size: 12px;
-  margin-bottom: 0;
-  font-weight: 500;
-  color: rgba(81, 86, 93, 0.7);
+  display: flex;
+  justify-content: right;
 }
 </style>

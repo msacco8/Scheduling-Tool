@@ -97,7 +97,7 @@
         startCol: col,
         day: dayNames[col-1],
         location: "Virtual",
-        availability: 1
+        availability: "preferred"
       }
       console.log(blockToAdd)
       availabilities.push(blockToAdd);
@@ -164,7 +164,7 @@
             bind:availabilities={availabilities}
             bind:availBlock={availBlock}
             bind:selectedBlockID={selectedBlockID}
-            calendarMatrix={timeBlocksMatrix}
+            bind:calendarMatrix={timeBlocksMatrix}
             bind:JsonAvailStore={JsonAvailStore}
             bind:username={username}
             bind:sTop={sTop}
@@ -203,18 +203,6 @@
   grid-auto-rows: 25px;
   overflow-y: scroll;
   z-index: 1
-}
-
-.calendar-body-availblocks {
-  display: grid;
-  width: 100%;
-  height: 500px;
-  grid-template-columns: repeat(8, minmax(120px, 1fr));
-  grid-template-rows: 50px;
-  grid-auto-rows: 50px;
-  overflow-y: scroll;
-  position: relative;
-  z-index: 2
 }
 .day {
   border-top: 1px solid #DCDCDC;

@@ -37,7 +37,6 @@
 
         // update fields of selected block
         let newTimes = getLength(data.start, data.end)
-        console.log("Newtimes:", newTimes);
         currentBlock.startRow = newTimes[0] + 1
         currentBlock.len = newTimes[1]
         currentBlock.location = data.location;
