@@ -13,7 +13,7 @@
     
     // @ts-ignore
     export let username;
-    export let JsonAvailStore;
+    export let JsonTimeStore;
     /**
      * @type {string}
      */
@@ -39,11 +39,14 @@
     function handleSubmitAvail() {
         endTime = new Date().getTime();
         let timePassed = endTime - startTime;
+        JsonTimeStore[username] = timePassed;
+        JsonTimeStore = JsonTimeStore;
+
         // JsonAvailStore[username] = [availabilities, timePassed];
         // JsonAvailStore
         // JsonAvailStore['enterTime'] += [{username : username, time: timePassed}]
         // JsonAvailStore = JsonAvailStore;
-        // localStorage.setItem("availabilitiesStore", JSON.stringify(JsonAvailStore));
+        localStorage.setItem("timeStore", JSON.stringify(JsonTimeStore));
     }
     
 </script>

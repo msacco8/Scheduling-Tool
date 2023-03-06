@@ -7,7 +7,7 @@
       import MainCal from '/src/components/MainCal.svelte'
       // @ts-ignore
       import RightPanel from '/src/components/RightPanel.svelte'
-      import {availabilitiesStore} from "./localstorage.js"
+      import {availabilitiesStore, timeStore} from "./localstorage.js"
 
       export let timeBlocksMatrix
 
@@ -21,6 +21,12 @@
       if (localStorage.getItem("availabilitiesStore") != "") {
             JsonAvailStore = JSON.parse(localStorage.getItem("availabilitiesStore") || "{}")
       }
+
+      let JsonTimeStore = JSON.parse("{}");
+      if (localStorage.getItem("timeStore") != "") {
+            JsonTimeStore = JSON.parse(localStorage.getItem("timeStore") || "{}")
+      }
+
 
       /**
      * @type {any[]}
@@ -56,6 +62,7 @@
       </div>
       <RightPanel 
       username={data.username}
+      bind:JsonTimeStore={JsonTimeStore}
       bind:timeBlocksMatrix={timeBlocksMatrix}
       bind:JsonAvailStore={JsonAvailStore}
       bind:selectedBlockID={selectedBlockID}
