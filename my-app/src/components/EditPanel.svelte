@@ -7,10 +7,13 @@
      * @type {string}
      */
     export let selectedBlockID;
+    export let timeBlocksMatrix;
      /**
      * @type {any[]}
      */
     export let availabilities;
+
+    export let username;
 
     /**
      * @type {any}
@@ -42,6 +45,7 @@
 
         selectedBlockID = '';
         availabilities = availabilities;
+        updateLocalStorageAvailabilities()
 
         console.log("submitted")
     }
@@ -65,6 +69,12 @@
         return HHMM
      }
 
+    function updateLocalStorageAvailabilities() {
+        JsonAvailStore[username] = availabilities;
+        JsonAvailStore = JsonAvailStore;
+        localStorage.setItem("availabilitiesStore", JSON.stringify(JsonAvailStore));
+    }
+
      function getLength(start, end) {
         let [hStart, mStart] = start.split(":");
         let [hEnd, mEnd]= end.split(":");
@@ -83,10 +93,15 @@
 
      function handleDelete() {
         console.log(currentBlock.id)
+        console.log(timeBlocksMatrix)
+        for (let i = 0; i < currentBlock.len; i++) {
+            timeBlocksMatrix[currentBlock.startRow+i][currentBlock.startCol] = 0;
+        }
         availabilities = availabilities.filter(el => el.id != currentBlock.id)
         selectedBlockID = ''
-
+        updateLocalStorageAvailabilities()
      }
+
 </script>
 <link href='https://fonts.googleapis.com/css?family=Montserrat:ital,wght@0,100;0,200;0,300;0,600;1,100;1,200;1,700' rel='stylesheet'>
 
@@ -117,15 +132,11 @@
                 step="900"
                 value={currentEnd}
                 required>
-            <label for="location-select">Choose a location:</label>
-            <select class="inp location-input" name="location" id="location-select">
-                <option value="">--Please choose an option--</option>
-                <!-- create locations object and loop to add each option -->
-                <option value="virtual">Virtual</option>
-            </select>
+            <label for="location-text">Choose a location:</label>
+            <input type="text" class="inp location-input" name="location" id="location-text" value={currentBlock.location}>
             <label for="availability-select">Choose an availability:</label>
             <select class="inp availability-input" name="availability" id="availability-select">
-                <option value="">--Please choose an option--</option>
+                <!-- <option value="">--Please choose an option--</option> -->
                 <option value="preferred" selected={currentBlock.availability === 1 ? "selected" : '' }>Preferred</option>
                 <option value="ifneeded" selected={currentBlock.availability === "ifneeded" ? "selected" : '' }>If Needed</option>
             </select>

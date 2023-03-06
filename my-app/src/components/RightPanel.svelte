@@ -1,13 +1,17 @@
 <script>
+// @ts-nocheck
+
     import ToolTips from './ToolTips.svelte';
     import EditPanel from './EditPanel.svelte';
     import { afterUpdate } from 'svelte';
     
-    export let username = "";
+    // @ts-ignore
+    export let username;
     /**
      * @type {string}
      */
      export let selectedBlockID;
+     export let timeBlocksMatrix;
      /**
      * @type {any}
      */
@@ -27,8 +31,10 @@
     </div>
     <div class="right-panel-container editing">
         <EditPanel
+            bind:username={username}
             bind:selectedBlockID={selectedBlockID}
             bind:availabilities={availabilities}
+            bind:timeBlocksMatrix={timeBlocksMatrix}
         />
     </div>
     <div class="right-panel-container">

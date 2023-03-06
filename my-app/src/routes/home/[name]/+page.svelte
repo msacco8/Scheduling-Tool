@@ -1,10 +1,14 @@
 <script>
+// @ts-nocheck
+
     import { afterUpdate } from 'svelte'
 
       // @ts-ignore
       import MainCal from '/src/components/MainCal.svelte'
       // @ts-ignore
       import RightPanel from '/src/components/RightPanel.svelte'
+
+      export let timeBlocksMatrix
 
        /**
      * @type {{ username: any; }}
@@ -43,6 +47,7 @@
             <MainCal
                   bind:selectedBlockID={selectedBlockID}
                   bind:availabilities={availabilities}
+                  bind:timeBlocksMatrix={timeBlocksMatrix}
                   bind:this={mainCal}
                   bind:JsonAvailStore={JsonAvailStore}
                   bind:username={data.username}
@@ -50,6 +55,7 @@
       </div>
       <RightPanel 
       username={data.username}
+      bind:timeBlocksMatrix={timeBlocksMatrix}
       bind:selectedBlockID={selectedBlockID}
       bind:availabilities={availabilities}
       />

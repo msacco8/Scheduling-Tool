@@ -49,7 +49,7 @@
   /**
      * @type {number[][]}
      */
-  var timeBlocksMatrix = []
+  export let timeBlocksMatrix = []
 
 	$: initContent();
   
