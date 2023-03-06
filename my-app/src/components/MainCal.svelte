@@ -72,6 +72,12 @@
       }
       timeBlocksMatrix.push(matrixRow);
     }
+
+    for (let avail of availabilities) {
+      for (let i = 0; i < avail.len; i++) {
+        timeBlocksMatrix[avail.startRow+i][avail.startCol] = 1;
+      }
+    }
   }
 
   // Adds new availability block to calendar

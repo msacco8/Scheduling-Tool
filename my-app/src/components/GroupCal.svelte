@@ -124,7 +124,7 @@
     .time {
     border-top: 1px solid #DCDCDC;
     border-right: 1px solid #DCDCDC;
-    text-align: right;
+    text-align: center;
     font-size: 12px;
     box-sizing: border-box;
     color: #98a0a6;

@@ -34,6 +34,7 @@
 
     onMount(() => {
         startTime = new Date().getTime();
+        console.log("STARTTIME:", startTime);
     });
 
     function handleSubmitAvail() {
@@ -42,10 +43,6 @@
         JsonTimeStore[username] = timePassed;
         JsonTimeStore = JsonTimeStore;
 
-        // JsonAvailStore[username] = [availabilities, timePassed];
-        // JsonAvailStore
-        // JsonAvailStore['enterTime'] += [{username : username, time: timePassed}]
-        // JsonAvailStore = JsonAvailStore;
         localStorage.setItem("timeStore", JSON.stringify(JsonTimeStore));
     }
     

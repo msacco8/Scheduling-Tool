@@ -5,7 +5,6 @@
      * @param {any} e
      */
     function navigate(e) {
-        console.log(e);
         if (e.key == "Enter") {
             document.getElementById("navigateHome")?.click();
         }
@@ -19,7 +18,7 @@
             <img src="logo.png" alt="Sync logo" style="width:70px;height:70px;">
             <p style="font-weight: bold; font-size: 30px;margin-top:0px;">Welcome to Sync</p>
             <p style="margin-bottom:150px;">Enter your Full Name to continue</p>
-            <input on:keypress={navigate} class="input-box" type="text" id="fname" name="firstname" bind:value={name}>
+            <input on:keypress={navigate} autocomplete="off" class="input-box" type="text" id="fname" name="firstname" bind:value={name}>
             {#if name != ""} 
             <a href="/home/{name}" ><button id="navigateHome" class="button">Continue</button></a>
             {:else}
