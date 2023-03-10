@@ -1,14 +1,17 @@
+<!-- 
+  Definition of EditPanel Concept
+ -->
 <script>
 // @ts-nocheck
 
-    import { beforeUpdate, afterUpdate, onMount } from 'svelte';
+    import { beforeUpdate } from 'svelte';
     import GroupCal from './GroupCal.svelte';
     /**
      * @type {string}
      */
     export let selectedBlockID;
     export let timeBlocksMatrix;
-     /**
+        /**
      * @type {any[]}
      */
     export let availabilities;
@@ -28,23 +31,17 @@
     let currentBlock;
     let currentStart;
     let currentEnd;
-    // currentStart = getStart(currentBlock.startRow) ? currentBlock : '';
-    // currentEnd = getStart(currentBlock.startRow + currentBlock.len) ? currentBlock : '';
-    // @ts-ignore
+    // Submits form
     function handleSubmit(event) {
         const formData = new FormData(event.target)
 
         const data = {};
         for (let field of formData) {
             const [key, value] = field;
-            // @ts-ignore
             data[key] = value;
         }
-        console.log(data)
 
         let newDays = data.day.split(',')
-        console.log(newDays)
-
         for (let i = 0; i < currentBlock.len; i++) {
             timeBlocksMatrix[currentBlock.startRow+i][currentBlock.startCol] = 0;
         }
@@ -57,7 +54,6 @@
         currentBlock.availability = data.availability;
         currentBlock.day = newDays.slice(0,2);
         currentBlock.startCol = newDays[2];
-        console.log(data.day)
 
         for (let i = 0; i < currentBlock.len; i++) {
             timeBlocksMatrix[currentBlock.startRow+i][currentBlock.startCol] = 1;
@@ -65,29 +61,25 @@
 
         selectedBlockID = '';
         availabilities = availabilities;
-        updateLocalStorageAvailabilities()
-
-        console.log("submitted")
+        updateLocalStorageAvailabilities();
     }
-     // @ts-ignore
+
     beforeUpdate(() => {
         if (selectedBlockID) {
             currentBlock = availabilities.find(el => el.id === selectedBlockID)
-            console.log(currentBlock.startRow)
             currentStart = getStart(currentBlock.startRow);
             currentEnd = getStart(currentBlock.startRow + currentBlock.len);
         }
-     })
+    })
 
-     function getStart(row) {
+    function getStart(row) {
         // need to get a string like "hh:mm" from start row
         let minutes = (parseInt(row) * 15) - 15; //some integer
         let m = minutes % 60;
         let h = 8 + (minutes-m)/60;
         let HHMM = (h < 10 ? "0" : "") + h.toString() + ":" + (m < 10 ? "0" : "") + m.toString();
-        console.log(HHMM)
         return HHMM
-     }
+    }
 
     function updateLocalStorageAvailabilities() {
         JsonAvailStore[username] = availabilities;
@@ -95,32 +87,26 @@
         localStorage.setItem("availabilitiesStore", JSON.stringify(JsonAvailStore));
     }
 
-     function getLength(start, end) {
+    function getLength(start, end) {
         let [hStart, mStart] = start.split(":");
         let [hEnd, mEnd]= end.split(":");
         hStart = parseInt(hStart);
         mStart = parseInt(mStart);
         hEnd = parseInt(hEnd);
         mEnd = parseInt(mEnd);
-        // console.log("start hours" + hStart);
-        // console.log("start minutes" + mStart);
         let startBlocks = (hStart * 4) + Math.floor(mStart / 15) - 32;
         let endBlocks = (hEnd * 4) + Math.floor(mEnd / 15) - 32;
-        console.log(startBlocks) 
-        console.log(endBlocks)
         return [startBlocks, endBlocks - startBlocks]
-     }
+        }
 
-     function handleDelete() {
-        console.log(currentBlock.id)
-        console.log(timeBlocksMatrix)
+        function handleDelete() {
         for (let i = 0; i < currentBlock.len; i++) {
             timeBlocksMatrix[currentBlock.startRow+i][currentBlock.startCol] = 0;
         }
         availabilities = availabilities.filter(el => el.id != currentBlock.id)
         selectedBlockID = ''
         updateLocalStorageAvailabilities()
-     }
+    }
 
 </script>
 <link href='https://fonts.googleapis.com/css?family=Montserrat:ital,wght@0,100;0,200;0,300;0,600;1,100;1,200;1,700' rel='stylesheet'>
@@ -166,32 +152,22 @@
             <input type="text" class="inp location-input" name="location" id="location-text" value={currentBlock.location}>
             <label class="inp-label" for="availability-select">Choose an availability:</label>
             <select class="inp availability-input" name="availability" id="availability-select">
-                <!-- <option value="">--Please choose an option--</option> -->
                 <option value="preferred" selected={currentBlock.availability === 1 ? "selected" : '' }>Preferred</option>
                 <option value="ifneeded" selected={currentBlock.availability === "ifneeded" ? "selected" : '' }>If Needed</option>
             </select>
             <input class="button" type="submit" value="Save">
             <button style="margin-left: 65px;" type="button" class="button" on:click={handleDelete}>Delete</button>
           </form>
-        <!-- <p>
-            {"start row: " + currentBlock.startRow}
-            {"start col: " + currentBlock.startCol}
-            {"id: " + currentBlock.id}
-            {"location: " + currentBlock.location}
-            {"availability: " + currentBlock.availability}
-            {"len: " + currentBlock.len}
-        </p> -->
     {:else}
+        <!-- 
+        GroupCal Concept
+        -->
         <GroupCal/>
     {/if}
 </div>
 
 
 <style>
-
-.inp-label {
-    
-}
 
 form {
     display: flex;

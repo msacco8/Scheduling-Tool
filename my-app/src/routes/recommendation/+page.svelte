@@ -115,6 +115,9 @@
                 <p>Below is the groups current availability and the current<br>best time interval for a 30 min meeting</p>
             </div>
             <div class="groupcal-container">
+                <!-- 
+                GroupCal Concept
+                -->
                 <GroupCal/>
             </div>
              <div style="margin-bottom:10px;">

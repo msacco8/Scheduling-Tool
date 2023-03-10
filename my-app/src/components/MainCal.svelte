@@ -1,10 +1,11 @@
-
+<!-- 
+  Definition of MainCal Concept
+ -->
 <script>
-	import {createEventDispatcher, onMount} from 'svelte';
+  // @ts-nocheck
   import AvailBlock from './AvailBlock.svelte';
   import { v4 as uuidv4 } from 'uuid';
 
-  // @ts-ignore
   /**
      * @type {string}
      */
@@ -34,8 +35,6 @@
       }
     }
   }
-
-  console.log("MainCal selectedBlockID: " + selectedBlockID)
 
 	var dayNames = [["Time EST", ""], ["Sun", "28"], ["Mon", "29"], ["Tue", "30"], ["Wed", "31"], ["Thu", "32"], ["Fri", "33"], ["Sat", "34"]];
 	/**
@@ -93,7 +92,6 @@
 
     if (isBlockAvailable == 0) {
       let time = (row - 1) * 30
-      console.log(time)
       let blockToAdd = {
         title: time,
         className: "task--primary",
@@ -105,7 +103,7 @@
         location: "Virtual",
         availability: "preferred"
       }
-      console.log(blockToAdd)
+
       availabilities.push(blockToAdd);
       updateLocalStorageAvailabilities();
       
@@ -114,11 +112,6 @@
       for (let i = 0; i < availabilities[availabilities.length-1].len; i++) {
         timeBlocksMatrix[row+i][col] = 1;
       }
-      // console.log("Before updating avail")
-      // console.log(availabilities)
-      // // availabilities = availabilities
-      // console.log("after updating avail")
-      // console.log(availabilities)
       return true;
     }
     return false;
@@ -209,6 +202,9 @@
     on:mouseleave={handleMouseLeave}
     on:mouseup={handleMouseLeave}
     on:scroll={(e)=>sTop=e.target.scrollTop}>
+        <!-- 
+        TimeBlock Concept
+        -->
         {#each timeBlocks as block}
           {#if block.col == 0 && (block.startMin % 60) == 0}
             <span class="time" style="grid-row: {block.row + 1}; grid-column: {block.col + 1};">{((block.startMin / 60) + 8) % 12 == 0 ? 12 : ((block.startMin / 60) + 8) % 12}:00  {((block.startMin / 60) + 8) >= 12 ? "PM" : "AM"}</span>
@@ -233,6 +229,9 @@
 
             
         {#each availabilities as availBlock}
+          <!-- 
+          AvailBlock Concept
+          -->
           <AvailBlock 
             bind:availabilities={availabilities}
             bind:availBlock={availBlock}

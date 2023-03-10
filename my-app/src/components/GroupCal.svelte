@@ -1,3 +1,7 @@
+<!-- 
+  Definition of GroupCal Concept
+ -->
+
 <script>
     var dayNames = ["","S", "M", "T", "W", "T", "F", "S"];
 
@@ -33,7 +37,6 @@
             timeCountsMatrix.push(matrixRow);
         }
 
-        console.log(groupAvailabilities);
         // Getting count of each availability time
         for (let person in groupAvailabilities) {
             for (let index in groupAvailabilities[person]) {
@@ -44,7 +47,6 @@
                 }
             }
         }
-        console.log(timeCountsMatrix[0]);
     }
 
 </script>
@@ -82,71 +84,71 @@
 <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 <style>
     .calendar-container {
-    width: 100%;
-    height: 75%;
-    margin: auto;
-    overflow: hidden;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0);
-    user-select: none;
-    margin-left: 5px;
+        width: 100%;
+        height: 75%;
+        margin: auto;
+        overflow: hidden;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0);
+        user-select: none;
+        margin-left: 5px;
     }
     .calendar {
-    display: grid;
-    width: 100%;
-    grid-template-columns: repeat(8, 40px);
-    grid-template-rows: 50px;
-    grid-auto-rows: 50px;
-    overflow: auto;
+        display: grid;
+        width: 100%;
+        grid-template-columns: repeat(8, 40px);
+        grid-template-rows: 50px;
+        grid-auto-rows: 50px;
+        overflow: auto;
     }
     .calendar-body {
-    display: grid;
-    width: 100%;
-    height: 100%;
-    grid-template-columns: repeat(8, minmax(35px, 1fr));
-    grid-template-rows: 10px;
-    grid-auto-rows: 10px;
-    overflow-y: scroll;
-    z-index: 1
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template-columns: repeat(8, minmax(35px, 1fr));
+        grid-template-rows: 10px;
+        grid-auto-rows: 10px;
+        overflow-y: scroll;
+        z-index: 1
     }
     .day {
-    border-top: 1px solid #DCDCDC;
-    border-right: 1px solid #DCDCDC;
-    text-align: right;
-    padding: 14px 20px;
-    letter-spacing: 1px;
-    font-size: 14px;
-    box-sizing: border-box;
-    color: #98a0a6;
-    position: relative;
-    z-index: 1;
+        border-top: 1px solid #DCDCDC;
+        border-right: 1px solid #DCDCDC;
+        text-align: right;
+        padding: 14px 20px;
+        letter-spacing: 1px;
+        font-size: 14px;
+        box-sizing: border-box;
+        color: #98a0a6;
+        position: relative;
+        z-index: 1;
     }
     .time {
-    border-top: 1px solid #DCDCDC;
-    border-right: 1px solid #DCDCDC;
-    text-align: center;
-    font-size: 12px;
-    box-sizing: border-box;
-    color: #98a0a6;
-    z-index: 1;
+        border-top: 1px solid #DCDCDC;
+        border-right: 1px solid #DCDCDC;
+        text-align: center;
+        font-size: 12px;
+        box-sizing: border-box;
+        color: #98a0a6;
+        z-index: 1;
     }
     .day:nth-of-type(8n + 8) {
-    border-right: 0;
+        border-right: 0;
     }
     .time:nth-of-type(8n + 1) {
-    border-top: 0;
-    border-bottom: 0;
-    border-right: 0;
+        border-top: 0;
+        border-bottom: 0;
+        border-right: 0;
     }
     .day-name {
-    font-family: 'Montserrat';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    text-transform: uppercase;
-    color: #B1B1B1;
-    text-align: center;
-    font-size: 20px;
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        text-transform: uppercase;
+        color: #B1B1B1;
+        text-align: center;
+        font-size: 20px;
     }
     .header {
         text-align: center;

@@ -1,12 +1,14 @@
+<!-- 
+  Definition of RightPanel Concept
+ -->
+
 <script>
 // @ts-nocheck
 
     import ToolTips from './ToolTips.svelte';
     import EditPanel from './EditPanel.svelte';
-    import { afterUpdate } from 'svelte';
     import { onMount } from 'svelte';
 
-    // var fs = require('fs');
     let newLine = '\r\n';
     let fields = ['User', 'Time (ms)'];
 
@@ -26,15 +28,8 @@
 
       let startTime;
       let endTime;
-    afterUpdate(() => {
-        console.log("RightPanel selectedBlock: " + selectedBlockID)
-        console.log("avails in rightpanel is: ")
-        console.log(availabilities)
-    });
-
     onMount(() => {
         startTime = new Date().getTime();
-        console.log("STARTTIME:", startTime);
     });
 
     function handleSubmitAvail() {
@@ -54,6 +49,9 @@
         <p>{username}</p>
     </div>
     <div class="right-panel-container editing">
+        <!-- 
+        EditPanel Concept
+        -->
         <EditPanel
             bind:username={username}
             bind:selectedBlockID={selectedBlockID}
@@ -62,6 +60,9 @@
         />
     </div>
     <div class="right-panel-container">
+        <!-- 
+        ToolTips Concept
+        -->
         <ToolTips/>
     </div>
     <a href="/recommendation"><button on:click={handleSubmitAvail} class="button">Submit Availablity</button></a>

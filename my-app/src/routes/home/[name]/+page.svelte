@@ -1,13 +1,10 @@
 <script>
 // @ts-nocheck
 
-    import { afterUpdate, onMount} from 'svelte'
+    import { afterUpdate } from 'svelte'
 
-      // @ts-ignore
       import MainCal from '/src/components/MainCal.svelte'
-      // @ts-ignore
       import RightPanel from '/src/components/RightPanel.svelte'
-      import {availabilitiesStore, timeStore} from "./localstorage.js"
 
       export let timeBlocksMatrix
 
@@ -33,10 +30,6 @@
      */
       let newEmptyAvailability = JsonAvailStore[data.username] ? JsonAvailStore[data.username] : [];
       let availabilities = JSON.stringify(JsonAvailStore) != "{}" ? newEmptyAvailability : [];
-      afterUpdate(() => {
-            console.log("main page avails is: ")
-            console.log(availabilities)
-      })
       /**
      * @type {{ clickToAddNewAvailability: () => any; }}
      */
@@ -51,6 +44,9 @@
                   <p>February 28-34, 2023</p>
                   <button on:click={() => mainCal.clickToAddNewAvailability()} class="button">+ Add New Availablity</button>
             </div>
+            <!-- 
+            MainCal Concept
+            -->
             <MainCal
                   bind:selectedBlockID={selectedBlockID}
                   bind:availabilities={availabilities}
@@ -60,6 +56,9 @@
                   bind:username={data.username}
             />
       </div>
+      <!-- 
+      RightPanel Concept
+      -->
       <RightPanel 
       username={data.username}
       bind:JsonTimeStore={JsonTimeStore}
